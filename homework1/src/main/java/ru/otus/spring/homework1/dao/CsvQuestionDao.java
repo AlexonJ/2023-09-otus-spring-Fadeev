@@ -21,10 +21,6 @@ public class CsvQuestionDao implements QuestionDao {
 
     @Override
     public List<Question> findAll() {
-        // Использовать CsvToBean
-        // https://opencsv.sourceforge.net/#collection_based_bean_fields_one_to_many_mappings
-        // Использовать QuestionReadException
-
         try {
             return new CsvToBeanBuilder<QuestionDto>(fileService.getReader(fileNameProvider.getTestFileName()))
                     .withType(QuestionDto.class).withSkipLines(1).withSeparator(COLUMNS_DELIMITER).build()
