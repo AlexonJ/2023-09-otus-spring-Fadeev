@@ -4,7 +4,6 @@ import com.opencsv.bean.CsvBindAndSplitByPosition;
 import com.opencsv.bean.CsvBindByPosition;
 import lombok.Data;
 import ru.otus.spring.homework1.domain.Answer;
-import ru.otus.spring.homework1.domain.Question;
 
 import java.util.ArrayList;
 import java.util.List;
