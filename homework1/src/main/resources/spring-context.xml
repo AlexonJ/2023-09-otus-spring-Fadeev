@@ -13,6 +13,8 @@
 
     <bean id="fileService" class="ru.otus.spring.homework1.service.FileServiceImpl" />
 
+    <bean id="mapper" class="ru.otus.spring.homework1.dao.dto.Mapper" />
+
     <bean id="ioService" class="ru.otus.spring.homework1.service.StreamsIOService">
         <constructor-arg name="printStream" type="java.io.PrintStream" value="#{T(System).out}"/>
     </bean>
@@ -29,6 +31,7 @@
     <bean id="questionDao" class="ru.otus.spring.homework1.dao.CsvQuestionDao">
         <constructor-arg name="fileService" type="ru.otus.spring.homework1.service.FileService" ref="fileService"/>
         <constructor-arg name="fileNameProvider" type="ru.otus.spring.homework1.config.TestFileNameProvider" ref="appConfig"/>
+        <constructor-arg name="mapper" type="ru.otus.spring.homework1.dao.dto.Mapper" ref="mapper"/>
     </bean>
 
 </beans>

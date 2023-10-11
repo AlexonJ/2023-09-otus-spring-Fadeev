@@ -7,6 +7,7 @@ import java.io.Reader;
 
 public class FileServiceImpl implements FileService {
 
+    @Override
     public Reader getReader(String filename) {
         InputStream inputStream = getFileFromResourceAsStream(filename);
 

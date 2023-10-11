@@ -3,6 +3,7 @@ package ru.otus.spring.homework1.dao;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
 import ru.otus.spring.homework1.config.TestFileNameProvider;
+import ru.otus.spring.homework1.dao.dto.Mapper;
 import ru.otus.spring.homework1.dao.dto.QuestionDto;
 import ru.otus.spring.homework1.domain.Question;
 import ru.otus.spring.homework1.exceptions.QuestionReadException;
@@ -19,12 +20,14 @@ public class CsvQuestionDao implements QuestionDao {
 
     private final FileService fileService;
 
+    private final Mapper mapper;
+
     @Override
     public List<Question> findAll() {
         try {
             return new CsvToBeanBuilder<QuestionDto>(fileService.getReader(fileNameProvider.getTestFileName()))
                     .withType(QuestionDto.class).withSkipLines(1).withSeparator(COLUMNS_DELIMITER).build()
-                    .stream().map(QuestionDto::toDomainObject).toList();
+                    .stream().map(mapper::questionDtoToQuestion).toList();
 
         } catch (Exception e) {
             throw new QuestionReadException("An error occurred while reading the file: " + e.getMessage(), e);

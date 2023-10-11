@@ -19,7 +19,4 @@ public class QuestionDto {
             converter = AnswerCsvConverter.class, splitOn = "\\|")
     private List<Answer> answers;
 
-    public Question toDomainObject() {
-        return new Question(text, answers);
-    }
 }
