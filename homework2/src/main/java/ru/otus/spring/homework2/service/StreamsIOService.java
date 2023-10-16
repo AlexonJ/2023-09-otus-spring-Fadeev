@@ -6,7 +6,6 @@ import ru.otus.spring.homework2.domain.Question;
 
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -37,11 +36,6 @@ public class StreamsIOService implements IOService {
     }
 
     @Override
-    public String readString() {
-        return scanner.nextLine();
-    }
-
-    @Override
     public String readStringWithPrompt(String prompt) {
         printLine(prompt);
         return scanner.nextLine();
@@ -68,13 +62,6 @@ public class StreamsIOService implements IOService {
     public int readIntForRangeWithPrompt(int min, int max, String prompt, String errorMessage) {
         printLine(prompt);
         return readIntForRange(min, max, errorMessage);
-    }
-
-    @Override
-    public void printQuestionsWithAnswers(List<Question> questions) {
-        for (Question question : questions) {
-            printQuestionWithAnswers(question);
-        }
     }
 
     @Override
