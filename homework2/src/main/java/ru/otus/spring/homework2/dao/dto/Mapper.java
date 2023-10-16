@@ -1,7 +1,7 @@
-package ru.otus.spring.homework1.dao.dto;
+package ru.otus.spring.homework2.dao.dto;
 
 import org.springframework.stereotype.Component;
-import ru.otus.spring.homework1.domain.Question;
+import ru.otus.spring.homework2.domain.Question;
 
 @Component
 public class Mapper {
