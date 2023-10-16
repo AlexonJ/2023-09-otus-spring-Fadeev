@@ -2,7 +2,6 @@ package ru.otus.spring.homework1.dao;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import ru.otus.spring.homework1.config.TestFileNameProvider;
 import ru.otus.spring.homework1.dao.dto.Mapper;
 import ru.otus.spring.homework1.dao.dto.QuestionDto;
@@ -13,7 +12,6 @@ import ru.otus.spring.homework1.service.FileService;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Component
 public class CsvQuestionDao implements QuestionDao {
 
     public static final Character COLUMNS_DELIMITER = ';';

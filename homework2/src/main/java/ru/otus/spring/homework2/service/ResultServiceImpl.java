@@ -21,7 +21,7 @@ public class ResultServiceImpl implements ResultService {
         ioService.printFormattedLine("#### Student %s testing results ####", result.getStudent().getFullName());
         for (Question question: result.getAnsweredQuestions()) {
                 Answer correctAnswer = question.getAnswers().stream()
-                        .filter(Answer::getIsCorrect).findFirst().get();
+                        .filter(Answer::getIsCorrect).findFirst().orElseThrow();
             Answer studentsAnswer = result.getAnswers().get(question);
             ioService.printFormattedLine("%s. Correct answer is %s. Student's answer is %s, it is %s",
                     question.getText(), correctAnswer.getText(), studentsAnswer.getText(),

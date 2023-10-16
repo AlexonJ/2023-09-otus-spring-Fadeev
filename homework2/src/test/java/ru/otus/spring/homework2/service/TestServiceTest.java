@@ -47,7 +47,7 @@ public class TestServiceTest {
 
         var firstQuestion = Assertions.assertDoesNotThrow(() -> testQuestions.get(0));
         var correctAnswer = Assertions.assertDoesNotThrow(() ->
-                firstQuestion.getAnswers().stream().filter(Answer::getIsCorrect).findFirst().get());
+                firstQuestion.getAnswers().stream().filter(Answer::getIsCorrect).findFirst().orElseThrow());
         Assertions.assertEquals(result.getAnswers().get(firstQuestion), correctAnswer);
         Assertions.assertTrue(outputStream.toString().contains("What is the largest ocean on Earth?"));
         Assertions.assertTrue(outputStream.toString().contains("You choose incorrect option"));
