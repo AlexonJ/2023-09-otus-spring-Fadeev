@@ -1,11 +1,9 @@
 package ru.otus.spring.homework2.domain;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @RequiredArgsConstructor
 public class Student {
 

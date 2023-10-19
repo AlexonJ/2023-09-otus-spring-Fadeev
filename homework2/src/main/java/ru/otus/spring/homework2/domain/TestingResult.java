@@ -1,16 +1,14 @@
 package ru.otus.spring.homework2.domain;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Getter
-@Setter
+@Data
 @RequiredArgsConstructor
 public class TestingResult {
 

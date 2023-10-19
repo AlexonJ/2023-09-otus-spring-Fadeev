@@ -13,7 +13,6 @@
         <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>6.0.12</spring.version>
-        <spring.version>6.0.12</spring.version>
         <opencsv.version>5.8</opencsv.version>
         <junit.version>5.10.0</junit.version>
         <mockito.version>5.4.0</mockito.version>
@@ -22,7 +21,6 @@
         <checkstyle-plugin.version>3.2.2</checkstyle-plugin.version>
         <checkstyle.version>10.11.0</checkstyle.version>
         <checkstyle.config.url>https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml</checkstyle.config.url>
-
     </properties>
 
     <dependencies>

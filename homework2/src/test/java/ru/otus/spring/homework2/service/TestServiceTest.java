@@ -30,7 +30,7 @@ public class TestServiceTest {
     private final ByteArrayInputStream inputStream = new ByteArrayInputStream("7\n3\n".getBytes());
 
     @Mock
-    CsvQuestionDao questionDao = Mockito.mock(CsvQuestionDao.class);
+    private CsvQuestionDao questionDao;
 
     private final IOService ioService = new StreamsIOService(new PrintStream(outputStream), inputStream);
 
