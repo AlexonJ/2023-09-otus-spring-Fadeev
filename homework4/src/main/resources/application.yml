@@ -1,0 +1,12 @@
+spring:
+  messages:
+    basename: "i18n/appmessages"
+    encoding: "UTF-8"
+
+application:
+  testFileName: question-data/questions_locale.csv
+  numberRightAnswersToPass: 3
+  default_locale: ru_RU
+  possible_locales:
+    - en
+    - ru_RU
