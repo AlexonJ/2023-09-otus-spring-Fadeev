@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @Data
@@ -20,7 +20,7 @@ public class AppConfig implements TestFileNameProvider, TestConfig, LocaleProvid
 
     private Locale defaultLocale;
 
-    private ArrayList<Locale> possibleLocales;
+    private List<Locale> possibleLocales;
 
     private Locale currentLocale;
 
