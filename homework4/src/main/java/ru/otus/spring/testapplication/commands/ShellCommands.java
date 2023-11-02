@@ -1,4 +1,4 @@
-package ru.otus.spring.testapplication.config;
+package ru.otus.spring.testapplication.commands;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
@@ -7,7 +7,7 @@ import ru.otus.spring.testapplication.service.ShellCommandService;
 
 @ShellComponent
 @RequiredArgsConstructor
-public class ShellConfig {
+public class ShellCommands {
 
     private final ShellCommandService shellService;
 
