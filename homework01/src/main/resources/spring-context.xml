@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:application.properties" />
+
+    <bean id="appConfig" class="ru.otus.spring.homework01.config.AppConfig">
+        <constructor-arg name="testFileName" value="${service.testFileName}"/>
+    </bean>
+
+    <bean id="fileService" class="ru.otus.spring.homework01.service.FileServiceImpl" />
+
+    <bean id="mapper" class="ru.otus.spring.homework01.dao.dto.Mapper" />
+
+    <bean id="ioService" class="ru.otus.spring.homework01.service.StreamsIOService">
+        <constructor-arg name="printStream" type="java.io.PrintStream" value="#{T(System).out}"/>
+    </bean>
+
+    <bean id="testService" class="ru.otus.spring.homework01.service.TestServiceImpl">
+        <constructor-arg name="ioService" type="ru.otus.spring.homework01.service.IOService" ref="ioService"/>
+        <constructor-arg name="questionDao" type="ru.otus.spring.homework01.dao.QuestionDao" ref="questionDao"/>
+    </bean>
+
+    <bean id="testRunnerService" class="ru.otus.spring.homework01.service.TestRunnerServiceImpl">
+        <constructor-arg name="testService" type="ru.otus.spring.homework01.service.TestService" ref="testService"/>
+    </bean>
+
+    <bean id="questionDao" class="ru.otus.spring.homework01.dao.CsvQuestionDao">
+        <constructor-arg name="fileService" type="ru.otus.spring.homework01.service.FileService" ref="fileService"/>
+        <constructor-arg name="fileNameProvider" type="ru.otus.spring.homework01.config.TestFileNameProvider" ref="appConfig"/>
+        <constructor-arg name="mapper" type="ru.otus.spring.homework01.dao.dto.Mapper" ref="mapper"/>
+    </bean>
+
+</beans>
