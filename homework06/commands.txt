@@ -1,0 +1,11 @@
+http://localhost:8080/h2-console
+
+bins --genresIds 1,2,3 --authorId 4 --title "The Great Gatsby"
+bins --genresIds 1,3 --authorId 1 --title "Brave New World"
+
+bbid --id 12
+
+bins --authorId 8 --title "The Adventures of Sherlock Holmes with Mistake" --genresIds 4,5
+bupd --id 14 --genresIds 4,5,8 --authorId 8 --title "The Adventures of Sherlock Holmes"
+bbid --id 14
+bdel --id 14

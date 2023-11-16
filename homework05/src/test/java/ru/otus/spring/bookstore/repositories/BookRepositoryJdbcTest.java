@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 @DisplayName("Репозиторий на основе Jdbc для работы с книгами ")
 @JdbcTest
 @Import({BookRepositoryJdbc.class, GenreRepositoryJdbc.class, AuthorRepositoryJdbc.class, GenreRelationsRepositoryJdbc.class})
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 class BookRepositoryJdbcTest {
 
     @Autowired
