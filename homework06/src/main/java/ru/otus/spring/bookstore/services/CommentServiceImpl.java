@@ -24,10 +24,13 @@ public class CommentServiceImpl implements CommentService {
 
     private final DtoMapper mapper;
 
+    @Transactional
     @Override
     public List<CommentDto> findCommentsByBookId(long id) {
-         List<Comment> comments = commentRepository.findAllByBookId(id);
-         return comments.stream().map(mapper::commentToCommentDto).toList();
+        var book = bookRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
+        List<Comment> comments = book.getComments();
+        return comments.stream().map(mapper::commentToCommentDto).toList();
     }
 
     @Override

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.bookstore.models.Comment;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,12 +21,12 @@ public class CommentRepositoryJpa implements CommentRepository {
         return Optional.ofNullable(entityManager.find(Comment.class, id));
     }
 
-    @Override
-    public List<Comment> findAllByBookId(long id) {
-        return entityManager.createQuery(
-                "SELECT comment FROM Comment AS comment WHERE comment.book.id= :id", Comment.class)
-                .setParameter("id", id).getResultList();
-    }
+//    @Override
+//    public List<Comment> findAllByBookId(long id) {
+//        return entityManager.createQuery(
+//                "SELECT comment FROM Comment AS comment WHERE comment.book.id= :id", Comment.class)
+//                .setParameter("id", id).getResultList();
+//    }
 
     @Override
     public Comment save(Comment comment) {

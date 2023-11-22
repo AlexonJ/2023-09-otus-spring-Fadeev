@@ -59,17 +59,6 @@ class CommentRepositoryJpaTest {
                 .get().isEqualTo(expectedCommentDto);
     }
 
-    @DisplayName("должен получать все комментарии для книги")
-    @ParameterizedTest
-    @MethodSource("getBooks")
-    void shouldReturnCorrectCommentList(Book expectedBook) {
-        var actualComments = commentRepository.findAllByBookId(expectedBook.getId()).stream().map(mapper::commentToCommentDto).toList();
-        var expectedComments = expectedBook.getComments().stream().map(mapper::commentToCommentDto).toList();
-
-        Assertions.assertThat(actualComments).usingRecursiveComparison().isEqualTo(expectedComments);
-        actualComments.forEach(System.out::println);
-    }
-
     @DisplayName("должен сохранять новый комментарий для книги")
     @Test
     void shouldSaveNewComment() {
@@ -124,7 +113,8 @@ class CommentRepositoryJpaTest {
     @MethodSource("getBooks")
     void shouldDeleteAllCommentsForBook(Book expectedBook) {
 
-        var actualCommentsDto = commentRepository.findAllByBookId(expectedBook.getId()).stream().map(mapper::commentToCommentDto).toList();
+        var actualCommentsDto = expectedBook.getComments().stream().map(
+                comment -> entityManager.find(Comment.class, comment.getId())).map(mapper::commentToCommentDto).toList();
         var expectedComments = expectedBook.getComments().stream().map(mapper::commentToCommentDto).toList();
 
         Assertions.assertThat(actualCommentsDto).usingRecursiveComparison().isEqualTo(expectedComments);
