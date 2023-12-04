@@ -1,12 +1,12 @@
 package ru.otus.spring.bookstore.repositories;
 
 import lombok.NonNull;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.bookstore.models.Genre;
 
 import java.util.List;
 
-public interface GenreRepository extends CrudRepository<Genre, Long> {
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
     @NonNull
     List<Genre> findAll();
