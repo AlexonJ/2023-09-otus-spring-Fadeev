@@ -8,7 +8,4 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @NonNull
-    List<Comment> findAllByBookId(long id);
-
 }

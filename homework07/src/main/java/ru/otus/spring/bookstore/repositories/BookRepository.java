@@ -8,7 +8,4 @@ import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @NonNull
-    List<Book> findAll();
-
 }

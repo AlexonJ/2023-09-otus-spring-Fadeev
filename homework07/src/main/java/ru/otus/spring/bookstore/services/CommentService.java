@@ -11,11 +11,9 @@ public interface CommentService {
 
     Optional<CommentDto> findById(long id);
 
-    @Transactional
     CommentDto insert(long bookId, String content);
 
     CommentDto updateById(long id, String content);
 
-    @Transactional
     void deleteById(long id);
 }
