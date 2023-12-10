@@ -7,8 +7,4 @@ import ru.otus.spring.bookstore.models.Book;
 import java.util.List;
 
 public interface BookRepository extends MongoRepository<Book, String> {
-
-    @NonNull
-    List<Book> findAll();
-
 }
