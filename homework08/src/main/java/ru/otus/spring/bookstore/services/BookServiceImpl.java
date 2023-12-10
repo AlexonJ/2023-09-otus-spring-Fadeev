@@ -2,7 +2,6 @@ package ru.otus.spring.bookstore.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.bookstore.exceptions.EntityNotFoundException;
 import ru.otus.spring.bookstore.models.Book;
 import ru.otus.spring.bookstore.repositories.AuthorRepository;
