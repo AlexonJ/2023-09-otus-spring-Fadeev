@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all genres</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .genres {
+            border: 1px solid steelblue;
+            width: 600px;
+            border-collapse: collapse;
+        }
+
+        .genres tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .genres td:last-child, td:first-child {
+            width: 50px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .button-container button {
+            width: 150px;
+        }
+
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<h3>Genres:</h3>
+
+<table class="genres" id="genres-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<div class="button-container">
+    <form th:action="@{/}" method="get">
+        <button type="submit">Home page</button>
+    </form>
+</div>
+
+<script>
+
+    fetch('/api/genres')
+        .then(response => response.json())
+        .then(data => fillGenresTable(data))
+        .catch(error => console.error('Error:', error));
+
+    function fillGenresTable(genres) {
+        const tableBody = document.querySelector('#genres-table tbody');
+        tableBody.innerHTML = '';
+
+        genres.forEach(genre => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+          <td>${genre.id}</td>
+          <td>${genre.name}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+</script>
+</body>
+</html>
