@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactor.core.publisher.Mono;
 import ru.otus.spring.bookstore.dtos.BookDtoIds;
 import ru.otus.spring.bookstore.mappers.DtoMapper;
 import ru.otus.spring.bookstore.services.AuthorService;
@@ -39,26 +40,25 @@ public class BookPagesController {
     }
 
     @GetMapping(path = {"/books/list", "/books"})
-    public String bookList() {
-        return "book-list-ajax";
+    public Mono<String> bookList() {
+        return Mono.just("book-list-ajax");
     }
 
     @GetMapping("/books/edit")
-    public String editPage(@RequestParam("id") long id, Model model) {
-        BookDtoIds book;
-        if (!(id == 0)) {
-            book = mapper.bookDtoToBookDtoIds(bookService.findByIdWithDetails(id).block());
-        } else {
-            book = new BookDtoIds();
-        }
-        model.addAttribute("book", book);
-        fillDataInModel(model, book.getId());
-        return "book-edit-ajax";
+    public Mono<String> editPage(@RequestParam("id") long id, Model model) {
+        return Mono.defer(() -> {
+            if (!(id == 0)) {
+                return bookService.findByIdWithDetails(id).map(mapper::bookDtoToBookDtoIds);
+            } else {
+                return Mono.just(new BookDtoIds());
+            }
+        }).doOnNext(bookDtoIds -> {
+            model.addAttribute("book", bookDtoIds);
+            model.addAttribute("authors", authorService.findAll());
+            model.addAttribute("genres", genreService.findAll());
+            model.addAttribute("comments", commentService.findCommentsByBookId(bookDtoIds.getId()));
+        }).thenReturn("book-edit-ajax");
+
     }
 
-    private void fillDataInModel(Model model, long bookId) {
-        model.addAttribute("authors", authorService.findAll());
-        model.addAttribute("genres", genreService.findAll());
-        model.addAttribute("comments", commentService.findCommentsByBookId(bookId));
-    }
 }
