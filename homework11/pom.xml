@@ -59,17 +59,6 @@
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-jpa</artifactId>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>com.h2database</groupId>-->
-<!--            <artifactId>h2</artifactId>-->
-<!--            <version>${h2.version}</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>r2dbc-postgresql</artifactId>
@@ -85,7 +74,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${org.lombok.version}</version>
-<!--            <optional>true</optional>-->
         </dependency>
 
         <dependency>
@@ -176,8 +164,6 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
 
