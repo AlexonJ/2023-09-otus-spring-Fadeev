@@ -1,7 +1,7 @@
 package ru.otus.spring.bookstore.controllers;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,15 +14,11 @@ import ru.otus.spring.bookstore.services.AuthorService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class AuthorController {
 
     private final AuthorService authorService;
-
-    @Autowired
-    public AuthorController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     @GetMapping(path = {"/authors/list", "/authors"})
     public String authorList(Model model) {

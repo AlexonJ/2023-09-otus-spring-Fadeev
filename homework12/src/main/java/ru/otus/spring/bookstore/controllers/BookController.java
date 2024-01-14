@@ -1,8 +1,8 @@
 package ru.otus.spring.bookstore.controllers;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.h2.util.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +23,7 @@ import ru.otus.spring.bookstore.services.GenreService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class BookController {
 
@@ -35,19 +36,6 @@ public class BookController {
     private final CommentService commentService;
 
     private final DtoMapper mapper;
-
-    @Autowired
-    public BookController(BookService bookService,
-                          AuthorService authorService,
-                          GenreService genreService,
-                          CommentService commentService,
-                          DtoMapper mapper) {
-        this.bookService = bookService;
-        this.authorService = authorService;
-        this.genreService = genreService;
-        this.commentService = commentService;
-        this.mapper = mapper;
-    }
 
     @GetMapping(path = {"/books/list", "/books"})
     public String bookList(Model model) {
