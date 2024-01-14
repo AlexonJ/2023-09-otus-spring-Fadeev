@@ -1,6 +1,6 @@
 package ru.otus.spring.bookstore.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +13,7 @@ import ru.otus.spring.bookstore.services.BookService;
 import ru.otus.spring.bookstore.services.CommentService;
 import ru.otus.spring.bookstore.services.GenreService;
 
+@RequiredArgsConstructor
 @Controller
 public class BookPagesController {
 
@@ -25,19 +26,6 @@ public class BookPagesController {
     private final CommentService commentService;
 
     private final DtoMapper mapper;
-
-    @Autowired
-    public BookPagesController(BookService bookService,
-                               AuthorService authorService,
-                               GenreService genreService,
-                               CommentService commentService,
-                               DtoMapper mapper) {
-        this.bookService = bookService;
-        this.authorService = authorService;
-        this.genreService = genreService;
-        this.commentService = commentService;
-        this.mapper = mapper;
-    }
 
     @GetMapping(path = {"/books/list", "/books"})
     public Mono<String> bookList() {

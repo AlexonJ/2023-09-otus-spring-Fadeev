@@ -1,5 +1,6 @@
 package ru.otus.spring.bookstore.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -19,15 +20,11 @@ import ru.otus.spring.bookstore.services.AuthorService;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @RestController
 public class AuthorRestController {
 
     private final AuthorService authorService;
-
-    @Autowired
-    public AuthorRestController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     @GetMapping(path = {"api/authors"})
     public ResponseEntity<Flux<AuthorDto>> getAllAuthorList() {

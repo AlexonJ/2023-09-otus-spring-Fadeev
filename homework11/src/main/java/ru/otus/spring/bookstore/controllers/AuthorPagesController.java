@@ -1,6 +1,6 @@
 package ru.otus.spring.bookstore.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,15 +9,11 @@ import reactor.core.publisher.Mono;
 import ru.otus.spring.bookstore.dtos.AuthorDto;
 import ru.otus.spring.bookstore.services.AuthorService;
 
+@RequiredArgsConstructor
 @Controller
 public class AuthorPagesController {
 
     private final AuthorService authorService;
-
-    @Autowired
-    public AuthorPagesController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     @GetMapping(path = {"/authors/list", "/authors"})
     public Mono<String> authorList() {
