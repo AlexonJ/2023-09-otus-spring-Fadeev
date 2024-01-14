@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Book edition -->
+<form id="edit-form" action="book-edit-ajax.html" th:action="@{/books/edit(id=${book.id})}" th:method="post" th:object="${book}">
+    <h3 th:text = "'Book info:'">Book info:</h3>
+
+    <div class="row">
+        <label for="id-input" th:text="'ID:'">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value=""/>
+    </div>
+
+    <div class="row">
+        <label for="book-title-input" th:text="'Title:'">Title:</label>
+        <input id="book-title-input" name="title" type="text" th:value="*{title}" value=""/>
+        <div class="errors" id="title-error"></div>
+    </div>
+
+    <div class="row">
+        <label for="book-author-input" th:text="'Author:'">Author:</label>
+        <select id="book-author-input" name="authorId" th:field="*{authorId}">
+            <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.getFullName()}"></option>
+        </select>
+        <div class="errors" id="authorId-error"></div>
+    </div>
+
+    <div class="row">
+        <label for="book-genre-input" th:text="'Genre:'">Genre:</label>
+        <select id="book-genre-input" name="genreIds" th:field="*{genreIds}" multiple>
+            <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+        </select>
+        <div class="errors" id="genreIds-error"></div>
+    </div>
+
+    <div class="row">
+        <label for="book-comment-input" th:text="'Comments:'">Comments:</label>
+        <select id="book-comment-input" name="comments" th:field="*{commentIds}" multiple>
+            <option th:each="comment : ${comments}" th:value="${comment.id}" th:text="${comment.content}"></option>
+        </select>
+
+        <div class="row">
+            <label for="book-new-comment-input" th:text="'New Comment:'">New Comment:</label>
+            <input id="book-new-comment-input" name="newCommentContent" type="text" />
+        </div>
+
+    </div>
+
+    <div class="row">
+        <button type="button" onclick="saveBook()">Save</button>
+        <a href="/books">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+
+</form>
+
+<script>
+    function saveBook() {
+
+        const form = document.getElementById('edit-form');
+        const formData = new FormData(form);
+
+        const params = new URLSearchParams();
+        const newCommentContent = formData.get('newCommentContent');
+        if (newCommentContent) {
+            params.append('newCommentContent', newCommentContent);
+        }
+
+        const queryString = params.toString();
+        const bookEditUrl = '/api/books' + (queryString ? '?' + queryString : '');
+
+        fetch(bookEditUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: formData.get('id'),
+                title: formData.get('title'),
+                authorId: formData.get('authorId'),
+                genreIds: formData.getAll('genreIds'),
+                commentIds: formData.getAll('commentIds'),
+            })
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(error => Promise.reject(error));
+            } else {
+                window.location.href = '/books'
+            }
+        }).catch(errors => {
+            displayErrors(errors);
+        });
+
+        function displayErrors(errors) {
+            clearErrors();
+            Object.entries(errors).forEach(([fieldName, errorMessage]) => {
+                const errorDiv = document.getElementById(`${fieldName}-error`);
+                if (errorDiv) {
+                    errorDiv.innerText = errorMessage;
+                }
+            });
+        }
+
+        function clearErrors() {
+            const errorDivs = document.querySelectorAll('.errors');
+            errorDivs.forEach(errorDiv => errorDiv.innerText = '');
+        }
+
+    }
+</script>
+
+</body>
+</html>
