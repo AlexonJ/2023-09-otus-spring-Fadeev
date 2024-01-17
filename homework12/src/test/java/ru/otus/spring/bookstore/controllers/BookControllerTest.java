@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -28,14 +30,29 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Контроллер для работы с книгами")
 @WebMvcTest(BookController.class)
-@AutoConfigureMockMvc(addFilters = false)
 @Import({DtoMapperImpl.class})
+@WithMockUser(
+        value = "admin",
+        password = "pwd",
+        username = "admin",
+        authorities = {"admin"}
+)
 public class BookControllerTest {
 
     private static final int FIRST_BOOK_INDEX = 0;
+
+    public static final String BOOKS_URL = "/books";
+
+    public static final String BOOKS_EDIT_URL = "/books/edit";
+
+    public static final String BOOKS_DELETE_URL = "/books/delete";
+
 
     @Autowired
     MockMvc mockMvc;
@@ -68,7 +85,7 @@ public class BookControllerTest {
     public void ShouldReturnCorrectBookList() throws Exception {
         var expectedBookDtoList = TestDataHolder.getBooks().stream().map(mapper::bookToBookDTO).toList();
         given(bookService.findAll()).willReturn(expectedBookDtoList);
-        mockMvc.perform(MockMvcRequestBuilders.get("/books/list"))
+        mockMvc.perform(MockMvcRequestBuilders.get(BOOKS_URL))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("book-list"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("books"))
@@ -90,7 +107,7 @@ public class BookControllerTest {
         given(authorService.findAll()).willReturn(expectedAuthorDtoList);
         given(commentService.findCommentsByBookId(anyLong())).willReturn(expectedCommentDtoList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/books/edit").param("id", Long.toString(expectedBook.getId())))
+        mockMvc.perform(MockMvcRequestBuilders.get(BOOKS_EDIT_URL).param("id", Long.toString(expectedBook.getId())))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("book-edit"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("book", "authors", "genres", "comments"))
@@ -105,7 +122,7 @@ public class BookControllerTest {
     public void ShouldReturnErrorInvalidId() throws Exception {
 
         given(bookService.findById(2)).willThrow(new EntityNotFoundException("Book with id %d not found".formatted(2)));
-        mockMvc.perform(MockMvcRequestBuilders.get("/books/edit").param("id", "2"))
+        mockMvc.perform(MockMvcRequestBuilders.get(BOOKS_EDIT_URL).param("id", "2"))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
 
     }
@@ -115,9 +132,10 @@ public class BookControllerTest {
     public void ShouldReturnErrorInvalidBookContent() throws Exception {
 
         var expectedBookDtoIds = new BookDtoIds();
-        mockMvc.perform(MockMvcRequestBuilders.post("/books/edit")
+        mockMvc.perform(MockMvcRequestBuilders.post(BOOKS_EDIT_URL)
                         .param("book", objectMapper.writeValueAsString(expectedBookDtoIds))
-                        .param("newCommentContent", ""))
+                        .param("newCommentContent", "")
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.model().attributeHasErrors("book"))
                 .andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("book", "title", "authorId", "genreIds"));
     }
@@ -125,8 +143,30 @@ public class BookControllerTest {
     @Test
     @DisplayName("Should call delete method in repository")
     public void ShouldCallDeleteMethod() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/books/delete")
+        mockMvc.perform(MockMvcRequestBuilders.get(BOOKS_DELETE_URL)
                         .param("id", "0"));
         verify(bookService, times(1)).deleteById(0L);
     }
+
+    @DisplayName("Security - authenticated. Should return successful status")
+    @Test
+    public void testAuthenticatedOnAdmin() throws Exception {
+        var expectedBookDto = mapper.bookToBookDTO(TestDataHolder.getBooks().get(FIRST_BOOK_INDEX));
+        given(bookService.findById(1)).willReturn(expectedBookDto);
+        mockMvc.perform(get(BOOKS_URL))
+                .andExpect(status().isOk());
+        mockMvc.perform(get(BOOKS_EDIT_URL).param("id", Long.toString(expectedBookDto.getId())))
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("Security - unauthenticated. Should return 401 (unauthorized) status")
+    @Test
+    @WithAnonymousUser
+    public void testUnauthorized() throws Exception {
+        mockMvc.perform(get(BOOKS_URL))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(get(BOOKS_EDIT_URL).param("id", "0"))
+                .andExpect(status().isUnauthorized());
+    }
+
 }
