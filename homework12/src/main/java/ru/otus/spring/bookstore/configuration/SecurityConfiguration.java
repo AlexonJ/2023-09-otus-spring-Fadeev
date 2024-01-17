@@ -3,7 +3,6 @@ package ru.otus.spring.bookstore.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,10 +25,11 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.GET,"/**").authenticated()
-                        .requestMatchers(HttpMethod.POST,"/**").hasAuthority("admin")
-                                .anyRequest().permitAll()
-                        )
+                        .requestMatchers("/", "/authors", "/authors/list",
+                                "/books", "/books/list", "/genres", "/genres/list").authenticated()
+                        .requestMatchers("/**").hasAuthority("admin")
+                        .anyRequest().denyAll()
+                )
                 .userDetailsService(userDetailsService)
                 .formLogin();
         return http.build();
