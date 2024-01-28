@@ -27,7 +27,7 @@ logging:
         web-allow-others: true
 
   liquibase:
-    change-log: classpath:classes/db/changelog/db.changelog-master.yaml
+    change-log: classpath:db/changelog/db.changelog-master.yaml
     url: jdbc:h2:mem:bookstoredb
     user: sa
     password:

@@ -11,6 +11,7 @@ import ru.otus.spring.bookstore.models.User;
 import ru.otus.spring.bookstore.repositories.UserRepository;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
