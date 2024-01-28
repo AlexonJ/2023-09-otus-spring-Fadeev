@@ -1,6 +1,7 @@
 package ru.otus.spring.bookstore.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.bookstore.dtos.CommentDto;
@@ -27,18 +28,21 @@ public class CommentServiceImpl implements CommentService {
 
     private final DtoMapper mapper;
 
+    @PreAuthorize("{hasAuthority('READ')} && {hasAuthority('BOOKS_ACCESS')}")
     @Override
     public List<CommentDto> findCommentsByBookId(long id) {
          List<Comment> comments = commentRepository.findAllByBookId(id);
          return comments.stream().map(mapper::commentToCommentDto).toList();
     }
 
+    @PreAuthorize("{hasAuthority('READ')} && {hasAuthority('BOOKS_ACCESS')}")
     @Override
     public CommentDto findById(long id) {
         return commentRepository.findById(id).map(mapper::commentToCommentDto)
                 .orElseThrow(() -> new EntityNotFoundException(COMMENT_NOT_FOUND_MESSAGE.formatted(id)));
     }
 
+    @PreAuthorize("{hasAuthority('WRITE')} && {hasAuthority('BOOKS_ACCESS')}")
     @Transactional
     @Override
     public CommentDto insert(long bookId, String content) {
@@ -48,6 +52,7 @@ public class CommentServiceImpl implements CommentService {
         return mapper.commentToCommentDto(commentRepository.save(comment));
     }
 
+    @PreAuthorize("{hasAuthority('WRITE')} && {hasAuthority('BOOKS_ACCESS')}")
     @Override
     public CommentDto updateById(long id, String content) {
         Comment comment = commentRepository.findById(id)
@@ -56,6 +61,7 @@ public class CommentServiceImpl implements CommentService {
         return mapper.commentToCommentDto(commentRepository.save(comment));
     }
 
+    @PreAuthorize("{hasAuthority('DELETE')} && {hasAuthority('BOOKS_ACCESS')}")
     @Override
     public void deleteById(long id) {
         commentRepository.deleteById(id);

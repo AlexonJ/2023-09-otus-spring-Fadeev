@@ -4,12 +4,18 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import ru.otus.spring.bookstore.configuration.SecurityConfiguration;
 import ru.otus.spring.bookstore.mappers.DtoMapper;
 import ru.otus.spring.bookstore.mappers.DtoMapperImpl;
 import ru.otus.spring.bookstore.models.Book;
@@ -20,13 +26,29 @@ import ru.otus.spring.bookstore.repositories.BookRepository;
 import ru.otus.spring.bookstore.repositories.CommentRepository;
 import ru.otus.spring.bookstore.repositories.GenreRepository;
 import ru.otus.spring.bookstore.repositories.TestDataHolder;
+import ru.otus.spring.bookstore.repositories.UserRepository;
 import ru.otus.spring.bookstore.services.BookServiceImpl;
+import ru.otus.spring.bookstore.services.UserDetailsServiceImpl;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DisplayName("Сервис для работы с книгами")
-@SpringBootTest(classes = {BookServiceImpl.class, AuthorRepository.class, GenreRepository.class, CommentRepository.class, DtoMapperImpl.class})
+@SpringBootTest(classes = {
+        BookServiceImpl.class,
+        AuthorRepository.class,
+        GenreRepository.class,
+        UserRepository.class,
+        CommentRepository.class,
+        DtoMapperImpl.class,
+        UserDetailsServiceImpl.class,
+        SecurityConfiguration.class})
+//@ContextConfiguration
+//@WebAppConfiguration
+@EnableAutoConfiguration
+//@AutoConfigureMockMvc
 @ActiveProfiles("test")
 class BookServiceTest {
 
@@ -42,6 +64,9 @@ class BookServiceTest {
         private GenreRepository genreRepository;
 
         @MockBean
+        private UserDetailsServiceImpl userDetailsService;
+
+        @MockBean
         private CommentRepository commentRepository;
 
         @Autowired
@@ -51,16 +76,12 @@ class BookServiceTest {
         @InjectMocks
         BookServiceImpl bookService;
 
+        Book expectedBook;
+
         @BeforeEach
         void setUp() {
             TestDataHolder.prepareTestData();
-        }
-
-        @DisplayName("должен возвращать заполненную книгу c установленным id")
-        @Test
-        void insert() {
-
-            var expectedBook = TestDataHolder.getBooks().get(FIRST_BOOK_INDEX);
+            expectedBook = TestDataHolder.getBooks().get(FIRST_BOOK_INDEX);
             Mockito.when(authorRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(expectedBook.getAuthor()));
             Mockito.when(genreRepository.findAllByIdIn(Mockito.anyList())).thenReturn(expectedBook.getGenres());
             Mockito.when(commentRepository.findAllByIdIn(Mockito.anyList())).thenReturn(expectedBook.getComments());
@@ -68,6 +89,18 @@ class BookServiceTest {
                 Book sourceBook = invocation.getArgument(0);
                 return new Book(1, sourceBook.getTitle(), sourceBook.getAuthor(), sourceBook.getGenres(), sourceBook.getComments());
             });
+        }
+
+        @DisplayName("Should successful return saved book with new id")
+        @Test
+        @WithMockUser(
+                value = "admin",
+                password = "pwd",
+                username = "admin",
+                authorities = {"WRITE", "BOOKS_ACCESS"}
+        )
+        void insertSuccessful() {
+
             var actualBookDto = bookService.insert(expectedBook.getTitle(),
                     expectedBook.getAuthor().getId(),
                     expectedBook.getGenres().stream().map(Genre::getId).collect(Collectors.toList()),
@@ -79,5 +112,36 @@ class BookServiceTest {
                     .ignoringFields("id")
                     .isEqualTo(mapper.bookToBookDTO(expectedBook));
         }
+
+    @DisplayName("An exception should be thrown when attempting to save book")
+    @Test
+    @WithMockUser(
+            value = "manager",
+            password = "usr",
+            username = "manager",
+            authorities = {"WRITE", "AUTHOR_ACCESS"}
+    )
+    void insertAccessDenied() {
+
+        Executable insertOperation = () -> bookService.insert(expectedBook.getTitle(),
+                expectedBook.getAuthor().getId(),
+                expectedBook.getGenres().stream().map(Genre::getId).collect(Collectors.toList()),
+                expectedBook.getComments().stream().map(Comment::getId).collect(Collectors.toList()));
+
+        assertThrows(AccessDeniedException.class, insertOperation);
+    }
+
+    @DisplayName("An exception should be thrown when attempting to save book")
+    @Test
+    @WithAnonymousUser
+    void insertAccessDeniedUnauthorized() {
+
+        Executable insertOperation = () -> bookService.insert(expectedBook.getTitle(),
+                expectedBook.getAuthor().getId(),
+                expectedBook.getGenres().stream().map(Genre::getId).collect(Collectors.toList()),
+                expectedBook.getComments().stream().map(Comment::getId).collect(Collectors.toList()));
+
+        assertThrows(AccessDeniedException.class, insertOperation);
+    }
 
 }

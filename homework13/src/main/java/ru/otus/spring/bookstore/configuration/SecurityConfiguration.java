@@ -3,6 +3,8 @@ package ru.otus.spring.bookstore.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
     private final UserDetailsService userDetailsService;
@@ -25,9 +28,9 @@ public class SecurityConfiguration {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "/authors", "/authors/list",
-                                "/books", "/books/list", "/genres", "/genres/list").authenticated()
-                        .requestMatchers("/**").hasAuthority("admin")
+                        .requestMatchers(HttpMethod.GET,"/", "/authors", "/books","/genres", "/*/list").hasAuthority("READ")
+                        .requestMatchers("/*/edit").hasAuthority("WRITE")
+                        .requestMatchers("/*/delete").hasAuthority("DELETE")
                         .anyRequest().denyAll()
                 )
                 .userDetailsService(userDetailsService)

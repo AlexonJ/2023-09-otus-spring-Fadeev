@@ -6,14 +6,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import ru.otus.spring.bookstore.configuration.SecurityConfiguration;
 import ru.otus.spring.bookstore.dtos.BookDtoIds;
 import ru.otus.spring.bookstore.exceptions.EntityNotFoundException;
 import ru.otus.spring.bookstore.mappers.DtoMapperImpl;
@@ -22,6 +25,7 @@ import ru.otus.spring.bookstore.services.AuthorService;
 import ru.otus.spring.bookstore.services.BookService;
 import ru.otus.spring.bookstore.services.CommentService;
 import ru.otus.spring.bookstore.services.GenreService;
+import ru.otus.spring.bookstore.services.UserDetailsServiceImpl;
 
 import java.util.Objects;
 
@@ -35,12 +39,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("Контроллер для работы с книгами")
 @WebMvcTest(BookController.class)
-@Import({DtoMapperImpl.class})
+@Import({DtoMapperImpl.class, SecurityConfiguration.class, UserDetailsServiceImpl.class})
+@AutoConfigureWebMvc
+@ActiveProfiles("test")
 @WithMockUser(
         value = "admin",
         password = "pwd",
         username = "admin",
-        authorities = {"admin"}
+        authorities = {"READ", "WRITE", "DELETE", "BOOKS_ACCESS"}
 )
 public class BookControllerTest {
 
@@ -67,6 +73,9 @@ public class BookControllerTest {
 
     @MockBean
     private CommentService commentService;
+
+    @MockBean
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private DtoMapperImpl mapper;
@@ -158,14 +167,28 @@ public class BookControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @DisplayName("Security - unauthenticated. Should return 401 (unauthorized) status")
+    @DisplayName("Security - unauthenticated. Should return 302 (redirected) status")
     @Test
     @WithAnonymousUser
     public void testUnauthorized() throws Exception {
         mockMvc.perform(get(BOOKS_URL))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection());
         mockMvc.perform(get(BOOKS_EDIT_URL).param("id", "0"))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().is3xxRedirection());
+    }
+
+    @DisplayName("Security - unauthenticated. Should return 403 (unauthorized) status")
+    @Test
+    @WithMockUser(
+            value = "manager",
+            password = "usr",
+            username = "manager"
+    )
+    public void testForbidden() throws Exception {
+        mockMvc.perform(get(BOOKS_URL))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(get(BOOKS_EDIT_URL).param("id", "0"))
+                .andExpect(status().isForbidden());
     }
 
 }
