@@ -1,6 +1,7 @@
 package ru.otus.spring.bookstore.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.bookstore.dtos.BookDto;
@@ -33,6 +34,7 @@ public class BookServiceImpl implements BookService {
 
     private final DtoMapper mapper;
 
+    @PreAuthorize("{hasAuthority('READ')} && {hasAuthority('BOOKS_ACCESS')}")
     @Transactional
     @Override
     public BookDto findById(long id) {
@@ -40,24 +42,29 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
     }
 
+    @PreAuthorize("{hasAuthority('READ')} && {hasAuthority('BOOKS_ACCESS')}")
     @Transactional
     @Override
     public List<BookDto> findAll() {
         return bookRepository.findAll().stream().map(mapper::bookToBookDTO).toList();
     }
 
+
+    @PreAuthorize("{hasAuthority('WRITE')} && {hasAuthority('BOOKS_ACCESS')}")
     @Transactional
     @Override
     public BookDto insert(String title, long authorId, List<Long> genresIds, List<Long> commentIds) {
         return mapper.bookToBookDTO(save(0, title, authorId, genresIds, commentIds));
     }
 
+    @PreAuthorize("{hasAuthority('WRITE')} && {hasAuthority('BOOKS_ACCESS')}")
     @Transactional
     @Override
     public BookDto update(long id, String title, long authorId, List<Long> genresIds, List<Long> commentIds) {
         return mapper.bookToBookDTO(save(id, title, authorId, genresIds, commentIds));
     }
 
+    @PreAuthorize("{hasAuthority('DELETE')} && {hasAuthority('BOOKS_ACCESS')}")
     @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
