@@ -35,7 +35,7 @@ public class BookServiceImpl implements BookService {
     private final DtoMapper mapper;
 
     @PreAuthorize("{hasAuthority('READ')} && {hasAuthority('BOOKS_ACCESS')}")
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public BookDto findById(long id) {
         return bookRepository.findById(id).map(mapper::bookToBookDTO)
@@ -43,14 +43,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @PreAuthorize("{hasAuthority('READ')} && {hasAuthority('BOOKS_ACCESS')}")
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<BookDto> findAll() {
         return bookRepository.findAll().stream().map(mapper::bookToBookDTO).toList();
     }
 
 
-    @PreAuthorize("{hasAuthority('WRITE')} && {hasAuthority('BOOKS_ACCESS')}")
+    @PreAuthorize("hasAuthority('WRITE') and hasAuthority('BOOKS_ACCESS')")
     @Transactional
     @Override
     public BookDto insert(String title, long authorId, List<Long> genresIds, List<Long> commentIds) {

@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -45,10 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         DtoMapperImpl.class,
         UserDetailsServiceImpl.class,
         SecurityConfiguration.class})
-//@ContextConfiguration
-//@WebAppConfiguration
 @EnableAutoConfiguration
-//@AutoConfigureMockMvc
 @ActiveProfiles("test")
 class BookServiceTest {
 
@@ -78,6 +76,8 @@ class BookServiceTest {
 
         Book expectedBook;
 
+        Executable insertOperation;
+
         @BeforeEach
         void setUp() {
             TestDataHolder.prepareTestData();
@@ -89,9 +89,15 @@ class BookServiceTest {
                 Book sourceBook = invocation.getArgument(0);
                 return new Book(1, sourceBook.getTitle(), sourceBook.getAuthor(), sourceBook.getGenres(), sourceBook.getComments());
             });
+
+            insertOperation = () -> bookService.insert(expectedBook.getTitle(),
+                    expectedBook.getAuthor().getId(),
+                    expectedBook.getGenres().stream().map(Genre::getId).collect(Collectors.toList()),
+                    expectedBook.getComments().stream().map(Comment::getId).collect(Collectors.toList()));
+
         }
 
-        @DisplayName("Should successful return saved book with new id")
+        @DisplayName("Should successful return saved book with new id with proper authorities")
         @Test
         @WithMockUser(
                 value = "admin",
@@ -113,7 +119,7 @@ class BookServiceTest {
                     .isEqualTo(mapper.bookToBookDTO(expectedBook));
         }
 
-    @DisplayName("An exception should be thrown when attempting to save book")
+    @DisplayName("An exception should be thrown when attempting to save book without proper authorities")
     @Test
     @WithMockUser(
             value = "manager",
@@ -121,27 +127,33 @@ class BookServiceTest {
             username = "manager",
             authorities = {"WRITE", "AUTHOR_ACCESS"}
     )
-    void insertAccessDenied() {
-
-        Executable insertOperation = () -> bookService.insert(expectedBook.getTitle(),
-                expectedBook.getAuthor().getId(),
-                expectedBook.getGenres().stream().map(Genre::getId).collect(Collectors.toList()),
-                expectedBook.getComments().stream().map(Comment::getId).collect(Collectors.toList()));
-
+    void insertAccessDeniedNoBookAccessAuthority() {
         assertThrows(AccessDeniedException.class, insertOperation);
     }
 
-    @DisplayName("An exception should be thrown when attempting to save book")
+    @DisplayName("An exception should be thrown when attempting to save book without proper authorities")
+    @Test
+    @WithMockUser(
+            value = "manager",
+            password = "usr",
+            username = "manager",
+            authorities = {"READ", "BOOKS_ACCESS"}
+    )
+    void insertAccessDeniedNoWriteAuthority() {
+        assertThrows(AccessDeniedException.class, insertOperation);
+    }
+    @DisplayName("An exception should be thrown when attempting to save book - anonymous user")
     @Test
     @WithAnonymousUser
-    void insertAccessDeniedUnauthorized() {
-
-        Executable insertOperation = () -> bookService.insert(expectedBook.getTitle(),
-                expectedBook.getAuthor().getId(),
-                expectedBook.getGenres().stream().map(Genre::getId).collect(Collectors.toList()),
-                expectedBook.getComments().stream().map(Comment::getId).collect(Collectors.toList()));
-
+    void insertAccessDeniedAnonymousUser() {
         assertThrows(AccessDeniedException.class, insertOperation);
     }
+
+    @DisplayName("An exception should be thrown when attempting to save book - unauthorized")
+    @Test
+    void insertAccessDeniedUnauthorized() {
+        assertThrows(AuthenticationCredentialsNotFoundException.class, insertOperation);
+    }
+
 
 }
