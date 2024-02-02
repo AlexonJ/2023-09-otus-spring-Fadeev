@@ -1,0 +1,59 @@
+shell:>migrate
+22:01:44.961 [main] INFO  o.s.b.c.l.support.SimpleJobLauncher - Job: [FlowJob: [name=migrateDataJob]] launched with the following parameters: [{}]
+22:01:44.974 [main] INFO  o.s.batch.core.job.SimpleStepHandler - Executing step: [startUpStep]
+22:01:44.979 [main] INFO  Batch - Cleaning up MongoDB collections before migration...
+22:01:45.016 [main] INFO  Batch - MongoDB cleanup completed.
+22:01:45.027 [main] INFO  o.s.batch.core.step.AbstractStep - Step: [startUpStep] executed in 53ms
+22:01:45.030 [main] INFO  o.s.batch.core.job.SimpleStepHandler - Executing step: [migrateAuthorsStep]
+22:01:45.229 [main] INFO  Batch - Start processing author George Orwell
+22:01:45.231 [main] INFO  Batch - Processing author Author{id=1, fullName='George Orwell'} finished. Created author George Orwell in mongo DB
+22:01:45.231 [main] INFO  Batch - Start processing author Jane Austen
+22:01:45.231 [main] INFO  Batch - Processing author Author{id=2, fullName='Jane Austen'} finished. Created author Jane Austen in mongo DB
+22:01:45.231 [main] INFO  Batch - Start processing author F. Scott Fitzgerald
+22:01:45.231 [main] INFO  Batch - Processing author Author{id=3, fullName='F. Scott Fitzgerald'} finished. Created author F. Scott Fitzgerald in mongo DB
+22:01:45.231 [main] INFO  Batch - Start processing author Harper Lee
+22:01:45.231 [main] INFO  Batch - Processing author Author{id=4, fullName='Harper Lee'} finished. Created author Harper Lee in mongo DB
+22:01:45.231 [main] INFO  Batch - Start processing author Ernest Hemingway
+22:01:45.231 [main] INFO  Batch - Processing author Author{id=5, fullName='Ernest Hemingway'} finished. Created author Ernest Hemingway in mongo DB
+22:01:45.251 [main] INFO  Batch - Start processing author J.K. Rowling
+22:01:45.251 [main] INFO  Batch - Processing author Author{id=6, fullName='J.K. Rowling'} finished. Created author J.K. Rowling in mongo DB
+22:01:45.251 [main] INFO  Batch - Start processing author Leo Tolstoy
+22:01:45.251 [main] INFO  Batch - Processing author Author{id=7, fullName='Leo Tolstoy'} finished. Created author Leo Tolstoy in mongo DB
+22:01:45.251 [main] INFO  Batch - Start processing author Agatha Christie
+22:01:45.252 [main] INFO  Batch - Processing author Author{id=8, fullName='Agatha Christie'} finished. Created author Agatha Christie in mongo DB
+22:01:45.254 [main] INFO  o.s.batch.core.step.AbstractStep - Step: [migrateAuthorsStep] executed in 224ms
+22:01:45.258 [main] INFO  o.s.batch.core.job.SimpleStepHandler - Executing step: [migrateBooksStep]
+22:01:45.279 [main] INFO  Batch - Start processing book Book{id=1, title='1984', author=Author{id=1, fullName='George Orwell'}}
+22:01:45.307 [main] INFO  Batch - Processing book Book{id=1, title='1984', author=Author{id=1, fullName='George Orwell'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe049', title='1984', author=Author{id='65bd2e099a1dd8775a5fe041', fullName='George Orwell'}} in mongo DB
+22:01:45.307 [main] INFO  Batch - Start processing book Book{id=2, title='Pride and Prejudice', author=Author{id=2, fullName='Jane Austen'}}
+22:01:45.310 [main] INFO  Batch - Processing book Book{id=2, title='Pride and Prejudice', author=Author{id=2, fullName='Jane Austen'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe04a', title='Pride and Prejudice', author=Author{id='65bd2e099a1dd8775a5fe042', fullName='Jane Austen'}} in mongo DB
+22:01:45.310 [main] INFO  Batch - Start processing book Book{id=3, title='The Great Gatsby', author=Author{id=3, fullName='F. Scott Fitzgerald'}}
+22:01:45.311 [main] INFO  Batch - Processing book Book{id=3, title='The Great Gatsby', author=Author{id=3, fullName='F. Scott Fitzgerald'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe04b', title='The Great Gatsby', author=Author{id='65bd2e099a1dd8775a5fe043', fullName='F. Scott Fitzgerald'}} in mongo DB
+22:01:45.311 [main] INFO  Batch - Start processing book Book{id=4, title='To Kill a Mockingbird', author=Author{id=4, fullName='Harper Lee'}}
+22:01:45.313 [main] INFO  Batch - Processing book Book{id=4, title='To Kill a Mockingbird', author=Author{id=4, fullName='Harper Lee'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe04c', title='To Kill a Mockingbird', author=Author{id='65bd2e099a1dd8775a5fe044', fullName='Harper Lee'}} in mongo DB
+22:01:45.313 [main] INFO  Batch - Start processing book Book{id=5, title='The Old Man and the Sea', author=Author{id=5, fullName='Ernest Hemingway'}}
+22:01:45.315 [main] INFO  Batch - Processing book Book{id=5, title='The Old Man and the Sea', author=Author{id=5, fullName='Ernest Hemingway'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe04d', title='The Old Man and the Sea', author=Author{id='65bd2e099a1dd8775a5fe045', fullName='Ernest Hemingway'}} in mongo DB
+22:01:45.328 [main] INFO  Batch - Start processing book Book{id=6, title='Harry Potter and the Philosopher's Stone', author=Author{id=6, fullName='J.K. Rowling'}}
+22:01:45.330 [main] INFO  Batch - Processing book Book{id=6, title='Harry Potter and the Philosopher's Stone', author=Author{id=6, fullName='J.K. Rowling'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe04e', title='Harry Potter and the Philosopher's Stone', author=Author{id='65bd2e099a1dd8775a5fe046', fullName='J.K. Rowling'}} in mongo DB
+22:01:45.330 [main] INFO  Batch - Start processing book Book{id=7, title='War and Peace', author=Author{id=7, fullName='Leo Tolstoy'}}
+22:01:45.331 [main] INFO  Batch - Processing book Book{id=7, title='War and Peace', author=Author{id=7, fullName='Leo Tolstoy'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe04f', title='War and Peace', author=Author{id='65bd2e099a1dd8775a5fe047', fullName='Leo Tolstoy'}} in mongo DB
+22:01:45.331 [main] INFO  Batch - Start processing book Book{id=8, title='Murder on the Orient Express', author=Author{id=8, fullName='Agatha Christie'}}
+22:01:45.333 [main] INFO  Batch - Processing book Book{id=8, title='Murder on the Orient Express', author=Author{id=8, fullName='Agatha Christie'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe050', title='Murder on the Orient Express', author=Author{id='65bd2e099a1dd8775a5fe048', fullName='Agatha Christie'}} in mongo DB
+22:01:45.333 [main] INFO  Batch - Start processing book Book{id=9, title='The Catcher in the Rye', author=Author{id=5, fullName='Ernest Hemingway'}}
+22:01:45.334 [main] INFO  Batch - Processing book Book{id=9, title='The Catcher in the Rye', author=Author{id=5, fullName='Ernest Hemingway'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe051', title='The Catcher in the Rye', author=Author{id='65bd2e099a1dd8775a5fe045', fullName='Ernest Hemingway'}} in mongo DB
+22:01:45.334 [main] INFO  Batch - Start processing book Book{id=10, title='Crime and Punishment', author=Author{id=7, fullName='Leo Tolstoy'}}
+22:01:45.336 [main] INFO  Batch - Processing book Book{id=10, title='Crime and Punishment', author=Author{id=7, fullName='Leo Tolstoy'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe052', title='Crime and Punishment', author=Author{id='65bd2e099a1dd8775a5fe047', fullName='Leo Tolstoy'}} in mongo DB
+22:01:45.341 [main] INFO  Batch - Start processing book Book{id=11, title='Harry Potter and the Chamber of Secrets', author=Author{id=6, fullName='J.K. Rowling'}}
+22:01:45.343 [main] INFO  Batch - Processing book Book{id=11, title='Harry Potter and the Chamber of Secrets', author=Author{id=6, fullName='J.K. Rowling'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe053', title='Harry Potter and the Chamber of Secrets', author=Author{id='65bd2e099a1dd8775a5fe046', fullName='J.K. Rowling'}} in mongo DB
+22:01:45.343 [main] INFO  Batch - Start processing book Book{id=12, title='Harry Potter and the Prisoner of Azkaban', author=Author{id=6, fullName='J.K. Rowling'}}
+22:01:45.345 [main] INFO  Batch - Processing book Book{id=12, title='Harry Potter and the Prisoner of Azkaban', author=Author{id=6, fullName='J.K. Rowling'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe054', title='Harry Potter and the Prisoner of Azkaban', author=Author{id='65bd2e099a1dd8775a5fe046', fullName='J.K. Rowling'}} in mongo DB
+22:01:45.345 [main] INFO  Batch - Start processing book Book{id=13, title='The Adventures of Sherlock Holmes', author=Author{id=8, fullName='Agatha Christie'}}
+22:01:45.347 [main] INFO  Batch - Processing book Book{id=13, title='The Adventures of Sherlock Holmes', author=Author{id=8, fullName='Agatha Christie'}} finished. Created book Book{id='65bd2e099a1dd8775a5fe055', title='The Adventures of Sherlock Holmes', author=Author{id='65bd2e099a1dd8775a5fe048', fullName='Agatha Christie'}} in mongo DB
+22:01:45.350 [main] INFO  o.s.batch.core.step.AbstractStep - Step: [migrateBooksStep] executed in 92ms
+22:01:45.355 [main] INFO  o.s.b.c.l.support.SimpleJobLauncher - Job: [FlowJob: [name=migrateDataJob]] completed with the following parameters: [{}] and the following status: [COMPLETED] in 384ms
+JobExecution: id=1, version=2, startTime=2024-02-02T22:01:44.968121400, endTime=2024-02-02T22:01:45.352827100, lastUpdated=2024-02-02T22:01:45.352827100, status=COMPLETED, exitStatus=exitCode=COMPLETED;exitDescription=, job=[JobInstance: id=1, version=0, Job=[migrateDataJob]], jobParameters=[{}]
+shell:>i
+migrateDataJob
+JobInstance: id=1, version=0, Job=[migrateDataJob]
+JobExecution: id=1, version=2, startTime=2024-02-02T22:01:44.968121400, endTime=2024-02-02T22:01:45.352827100, lastUpdated=2024-02-02T22:01:45.352827100, status=COMPLETED, exitStatus=exitCode=COMPLETED;exitDescription=, job=[JobInstance: id=1, version=0, Job=[migrateDataJob]], jobParameters=[{}]
+shell:>
