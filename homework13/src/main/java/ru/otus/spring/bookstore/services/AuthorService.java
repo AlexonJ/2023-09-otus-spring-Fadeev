@@ -1,7 +1,6 @@
 package ru.otus.spring.bookstore.services;
 
 import ru.otus.spring.bookstore.dtos.AuthorDto;
-import ru.otus.spring.bookstore.models.Author;
 
 import java.util.List;
 
@@ -16,5 +15,4 @@ public interface AuthorService {
 
     void deleteById(long id);
 
-    Author save(long id, String fullName);
 }

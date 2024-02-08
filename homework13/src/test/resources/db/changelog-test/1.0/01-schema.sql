@@ -31,10 +31,23 @@ CREATE TABLE books_genres
     genre_id BIGINT REFERENCES genres (id) ON DELETE CASCADE,
     PRIMARY KEY (book_id, genre_id)
 );
+
 CREATE TABLE users
 (
     id         BIGSERIAL PRIMARY KEY,
     username   VARCHAR(64),
-    password   VARCHAR(1024),
-    role       VARCHAR(255)
+    password   VARCHAR(1024)
 );
+
+CREATE TABLE roles
+(
+    id         BIGSERIAL PRIMARY KEY,
+    role_name  VARCHAR(255)
+);
+
+CREATE TABLE users_roles
+(
+    user_id  BIGINT REFERENCES users (id) ON DELETE CASCADE,
+    role_id  BIGINT REFERENCES roles (id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, role_id)
+)
