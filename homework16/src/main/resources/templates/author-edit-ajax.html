@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Author edition -->
+<form id="edit-form" action="author-edit-ajax.html" th:action="@{/authors/edit(id=${author.id})}" th:method="post" th:object="${author}">
+    <h3>Author info:</h3>
+
+    <div class="row">
+        <label for="id-input" th:text="'ID:'">ID:</label>
+        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value=""/>
+    </div>
+
+    <div class="row">
+        <label for="author-title-input">Full name:</label>
+        <input id="author-title-input" name="fullName" type="text" th:value="*{fullName}" value=""/>
+        <div class="errors" id="fullName-error"></div>
+    </div>
+
+    <div class="row">
+        <button type="button" onclick="saveAuthor()">Save</button>
+        <a href="/authors">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+</form>
+
+<script>
+    function saveAuthor() {
+
+        const form = document.getElementById('edit-form');
+        const formData = new FormData(form);
+
+        fetch('/api/authors', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: formData.get('id'),
+                fullName: formData.get('fullName'),
+            })
+        }).then(response => {
+            if (!response.ok) {
+                return response.json().then(error => Promise.reject(error));
+            }
+            return response.json();
+        })
+            .then(data => {
+                window.location.href = '/authors'
+            })
+            .catch(errors => {
+                displayErrors(errors);
+            });
+
+        function displayErrors(errors) {
+            clearErrors();
+            Object.entries(errors).forEach(([fieldName, errorMessage]) => {
+                const errorDiv = document.getElementById(`${fieldName}-error`);
+                if (errorDiv) {
+                    errorDiv.innerText = errorMessage;
+                }
+            });
+        }
+
+        function clearErrors() {
+            const errorDivs = document.querySelectorAll('.errors');
+            errorDivs.forEach(errorDiv => errorDiv.innerText = '');
+        }
+
+    }
+</script>
+
+</body>
+</html>
