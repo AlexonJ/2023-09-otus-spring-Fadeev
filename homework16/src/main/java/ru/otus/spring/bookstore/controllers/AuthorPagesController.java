@@ -1,22 +1,19 @@
 package ru.otus.spring.bookstore.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.thymeleaf.util.StringUtils;
 import ru.otus.spring.bookstore.dtos.AuthorDto;
-import ru.otus.spring.bookstore.services.AuthorService;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthorPagesController {
 
-    private final AuthorService authorService;
-
-    @Autowired
-    public AuthorPagesController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping(path = {"/authors/list", "/authors"})
     public String authorList() {
@@ -24,14 +21,15 @@ public class AuthorPagesController {
     }
 
     @GetMapping("/authors/edit")
-    public String editPage(@RequestParam("id") long id, Model model) {
+    public String editPage(@RequestParam("author_href") String authorHref, Model model) {
         AuthorDto author;
-        if (!(id == 0)) {
-            author = authorService.findById(id);
+        if (!StringUtils.isEmpty(authorHref)) {
+            author = restTemplate.getForObject(authorHref, AuthorDto.class);
         } else {
             author = new AuthorDto();
         }
         model.addAttribute("author", author);
+        model.addAttribute("author_href", authorHref);
         return "author-edit-ajax";
     }
 

@@ -9,6 +9,7 @@ import ru.otus.spring.bookstore.models.Author;
 import ru.otus.spring.bookstore.repositories.AuthorRepository;
 
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 @Service
@@ -20,7 +21,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<AuthorDto> findAll() {
-        return authorRepository.findAll().stream().map(mapper::authorToAuthorDto).toList();
+        return StreamSupport.stream(authorRepository.findAll().spliterator(), false).map(mapper::authorToAuthorDto).toList();
     }
 
     @Override

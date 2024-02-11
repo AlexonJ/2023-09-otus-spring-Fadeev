@@ -82,12 +82,15 @@
 
         books.forEach(book => {
             const row = document.createElement('tr');
+            const genresAsString = book.genres.map(genre => genre.name).join(', ');
+            const commentsAsString = book.comments.map(comment => comment.content).join(', ');
+
             row.innerHTML = `
           <td>${book.id}</td>
           <td>${book.title}</td>
           <td>${book.author.fullName}</td>
-          <td>${book.genresAsString}</td>
-          <td>${book.commentsAsString}</td>
+          <td>${genresAsString}</td>
+          <td>${commentsAsString}</td>
               <td>
                 <button onclick="editBook(${book.id})">Edit</button>
               </td>

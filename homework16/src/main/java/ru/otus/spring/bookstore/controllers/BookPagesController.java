@@ -56,26 +56,6 @@ public class BookPagesController {
         return "book-edit-ajax";
     }
 
-//    @PostMapping("/books/edit")
-//    public String saveBook(@Valid @ModelAttribute("book") BookDtoIds book,
-//                           BindingResult bindingResult,
-//                           @RequestParam(name = "newCommentContent", required = false) String newCommentContent,
-//                           Model model) {
-//        if (bindingResult.hasErrors()) {
-//            fillDataInModel(model, book.getId());
-//            return "book-edit-ajax";
-//        }
-//
-//        var savedBookId = bookService.update(book.getId(), book.getTitle(), book.getAuthorId(),
-//                book.getGenreIds(), book.getCommentIds()).getId();
-//
-//        if (!StringUtils.isNullOrEmpty(newCommentContent)) {
-//            commentService.insert(savedBookId, newCommentContent);
-//        }
-//
-//        return "redirect:/books";
-//    }
-
     private void fillDataInModel(Model model, long bookId) {
         model.addAttribute("authors", authorService.findAll());
         model.addAttribute("genres", genreService.findAll());
