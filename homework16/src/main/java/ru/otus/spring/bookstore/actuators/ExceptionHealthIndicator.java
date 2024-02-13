@@ -17,14 +17,14 @@ public class ExceptionHealthIndicator implements HealthIndicator {
     public Health health() {
 
         var status = Status.UP;
-        if (controllerAdvice.getTotalExceptionsCounter().count() != 0) {
+        if (controllerAdvice.getTotalExceptionsCounter() != 0) {
             status = Status.DOWN;
         }
 
         return Health.up()
                 .status(status)
-                .withDetail("Entity not found exceptions number", controllerAdvice.getExceptionNotFoundCounter().count())
-                .withDetail("Total exceptions number", controllerAdvice.getTotalExceptionsCounter().count())
+                .withDetail("Entity not found exceptions number", controllerAdvice.getExceptionNotFoundCounter())
+                .withDetail("Total exceptions number", controllerAdvice.getTotalExceptionsCounter())
                 .build();
     }
 }

@@ -1,14 +1,11 @@
 package ru.otus.spring.bookstore.actuators;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import lombok.Data;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
@@ -22,50 +19,34 @@ public class DataBaseHealthIndicator  implements HealthIndicator {
 
     private final Logger logger = LoggerFactory.getLogger(BookstoreApp.class);
 
-    private final Counter totalEntitiesChanged;
+    private long totalEntitiesChanged;
 
-    private final Counter totalEntitiesAdded;
+    private long totalEntitiesAdded;
 
-    private final Counter totalEntitiesDeleted;
-
-    @Autowired
-    public DataBaseHealthIndicator(MeterRegistry registry) {
-
-        totalEntitiesChanged = Counter.builder("totalEntitiesChanged")
-                .description("Number of changed entities")
-                .register(registry);
-
-        totalEntitiesAdded = Counter.builder("totalEntitiesAdded")
-                .description("Number of saved entities")
-                .register(registry);
-
-        totalEntitiesDeleted = Counter.builder("totalEntitiesDeleted")
-                .description("Number of deleted entities")
-                .register(registry);
-    }
+    private long totalEntitiesDeleted;
 
     @Override
     public Health health() {
         return Health.up()
                 .status(Status.UP)
-                .withDetail("Number of changed entities: ", totalEntitiesChanged.count())
-                .withDetail("Number of added entities: ", totalEntitiesAdded.count())
-                .withDetail("Number of deleted entities: ", totalEntitiesDeleted.count())
+                .withDetail("Number of changed entities: ", totalEntitiesChanged)
+                .withDetail("Number of added entities: ", totalEntitiesAdded)
+                .withDetail("Number of deleted entities: ", totalEntitiesDeleted)
                 .build();
     }
 
     public void increaseChangedEntities() {
-        totalEntitiesChanged.increment();
+        totalEntitiesChanged++;
         logger.info("Entity changed");
     }
 
     public void increaseAddedEntities() {
-        totalEntitiesAdded.increment();
+        totalEntitiesAdded++;
         logger.info("Entity added");
     }
 
     public void increaseDeletedEntities() {
-        totalEntitiesDeleted.increment();
+        totalEntitiesDeleted++;
         logger.info("Entity deleted");
     }
 
@@ -95,13 +76,11 @@ public class DataBaseHealthIndicator  implements HealthIndicator {
         increaseAddedEntities();
     }
 
-    // Advice for update method
     @AfterReturning("updateMethod()")
     private void countUpdateMethodCall() {
         increaseChangedEntities();
     }
 
-    // Advice for delete method
     @AfterReturning("deleteMethod()")
     private void countDeleteMethodCall() {
         increaseDeletedEntities();
