@@ -11,8 +11,12 @@ public class BookstoreApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookstoreApp.class, args);
-		System.out.printf("Чтобы перейти на страницу сайта открывай: %n%s%n",
+		System.out.printf("Main page is here: %n%s%n",
 				"http://localhost:8080");
+		System.out.printf("Actuator health page here: %n%s%n",
+				"http://localhost:8080/actuator/health");
+		System.out.printf("HAL explorer here: %n%s%n",
+				"http://localhost:8080/api-rest/explorer/");
 	}
 
 }

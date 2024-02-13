@@ -13,18 +13,36 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
+    show-sql: false
+  jmx:
+    enabled: true
+  data:
+    rest:
+      base-path: /api-rest
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  health:
+    defaults:
+      enabled: true
 
 logging:
   level:
-    ROOT: ERROR
+    ROOT: INFO
   h2:
     console:
       enabled: true
       path: /h2-console
       settings:
         web-allow-others: true
+  file:
+    name: "logging-file.log"
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml

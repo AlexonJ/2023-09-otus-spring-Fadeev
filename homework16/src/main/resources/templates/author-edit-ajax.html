@@ -45,12 +45,12 @@
 <body>
 
 <!-- Author edition -->
-<form id="edit-form" action="author-edit-ajax.html" th:action="@{/authors/edit(id=${author.id})}" th:method="post" th:object="${author}">
+<form id="edit-form" action="author-edit-ajax.html" th:action="@{author_href}" th:method="post" th:object="${author}">
     <h3>Author info:</h3>
 
     <div class="row">
-        <label for="id-input" th:text="'ID:'">ID:</label>
-        <input id="id-input" type="text" readonly="readonly" name="id" th:value="*{id}" value=""/>
+        <label for="id-input" th:text="'href:'">Ref:</label>
+        <input id="id-input" type="text" readonly="readonly" name="author_href" th:value="${author_href}" value=""/>
     </div>
 
     <div class="row">
@@ -72,14 +72,19 @@
 
         const form = document.getElementById('edit-form');
         const formData = new FormData(form);
+        let requestPath = formData.get('author_href');
+        let httpMethod = 'PATCH';
+        if (!requestPath.trim()) {
+            requestPath = '/api-rest/authors';
+            httpMethod = 'POST';
+        }
 
-        fetch('/api/authors', {
-            method: 'POST',
+        fetch(requestPath, {
+            method: httpMethod,
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: formData.get('id'),
                 fullName: formData.get('fullName'),
             })
         }).then(response => {
