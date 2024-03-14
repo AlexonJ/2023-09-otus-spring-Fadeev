@@ -1,0 +1,11 @@
+FROM openjdk:22-jdk-slim-bullseye
+
+# Set metadata for the image
+LABEL maintainer="Alexey <fmailp@yandex.ru>"
+LABEL description="This is a Docker image based on Debian with java and Bookstore application."
+LABEL version="2.0"
+LABEL release-date="2024-03-14"
+
+EXPOSE 8080
+ADD target/Bookstore-app-2.0.0.jar BookstoreApp.jar
+ENTRYPOINT ["java","-jar","/BookstoreApp.jar"]
