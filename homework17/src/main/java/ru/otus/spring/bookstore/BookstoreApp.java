@@ -6,9 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// url h2 консоли: http://localhost:8080/h2-console
-// url базы: jdbc:h2:mem:bookstoredb
-
 @SpringBootApplication
 public class BookstoreApp {
 
