@@ -1,0 +1,25 @@
+version: '3'
+services:
+  bookstoreapp:
+    container_name: docker-bookstoreapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bookstoredb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - postgres
+    command: [ "./wait-for-postgres.sh", "postgres", "java", "-jar", "/BookstoreApp.jar" ]
+  postgres:
+    image: "postgres:13"
+    container_name: docker-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bookstoredb

@@ -1,10 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:bookstoredb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:bookstoredb}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
   jpa:
     open-in-view: false
     generate-ddl: false
@@ -46,7 +44,7 @@ logging:
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
-    url: jdbc:h2:mem:bookstoredb
-    user: sa
-    password:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:bookstoredb}
+    user: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
     enabled: true
