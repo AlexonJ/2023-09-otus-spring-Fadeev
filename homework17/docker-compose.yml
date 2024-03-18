@@ -11,6 +11,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bookstoredb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - postgres
+    command: [ "./wait-for-postgres.sh", "postgres", "java", "-jar", "/BookstoreApp.jar" ]
   postgres:
     image: "postgres:13"
     container_name: docker-postgres
