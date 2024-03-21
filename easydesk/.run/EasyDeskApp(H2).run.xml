@@ -1,0 +1,19 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="EasyDeskApp(H2)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <envs>
+      <env name="SERVICE_ALLOW_SENDING_EMAIL" value="false" />
+      <env name="SPRING_DATASOURCE_PASSWORD" value="" />
+      <env name="SPRING_DATASOURCE_URL" value="jdbc:h2:mem:easydeskdb" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="sa" />
+      <env name="SPRING_MAIL_HOST" value="smtp.gmail.com" />
+      <env name="SPRING_MAIL_PASSWORD" value="Grks#kGoejMEXG48" />
+      <env name="SPRING_MAIL_PORT" value="587" />
+      <env name="SPRING_MAIL_USERNAME" value="testalexandertest" />
+    </envs>
+    <module name="EasyDesk" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.otus.spring.finalproject.easydesk.EasyDeskApp" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
