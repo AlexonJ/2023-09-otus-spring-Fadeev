@@ -9,6 +9,7 @@
       <env name="SPRING_MAIL_PASSWORD" value="Grks#kGoejMEXG48" />
       <env name="SPRING_MAIL_PORT" value="587" />
       <env name="SPRING_MAIL_USERNAME" value="testalexandertest" />
+      <env name="SPRING_MAIL_CHECK_HEALTH" value="false" />
     </envs>
     <module name="EasyDesk" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ru.otus.spring.finalproject.easydesk.EasyDeskApp" />

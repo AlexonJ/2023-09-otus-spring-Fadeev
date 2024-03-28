@@ -5,10 +5,11 @@
       <env name="SPRING_DATASOURCE_PASSWORD" value="" />
       <env name="SPRING_DATASOURCE_URL" value="jdbc:h2:mem:easydeskdb" />
       <env name="SPRING_DATASOURCE_USERNAME" value="sa" />
+      <env name="SPRING_MAIL_CHECK_HEALTH" value="false" />
       <env name="SPRING_MAIL_HOST" value="smtp.gmail.com" />
-      <env name="SPRING_MAIL_PASSWORD" value="Grks#kGoejMEXG48" />
+      <env name="SPRING_MAIL_PASSWORD" value="djvf kvaq wwkm mkqy" />
       <env name="SPRING_MAIL_PORT" value="587" />
-      <env name="SPRING_MAIL_USERNAME" value="testalexandertest" />
+      <env name="SPRING_MAIL_USERNAME" value="emailapp" />
     </envs>
     <module name="EasyDesk" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="ru.otus.spring.finalproject.easydesk.EasyDeskApp" />

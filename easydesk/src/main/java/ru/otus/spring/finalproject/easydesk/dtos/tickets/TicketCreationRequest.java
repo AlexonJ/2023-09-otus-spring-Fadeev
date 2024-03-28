@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.spring.finalproject.easydesk.models.enums.TicketCategory;
+import ru.otus.spring.finalproject.easydesk.models.enums.Category;
 import ru.otus.spring.finalproject.easydesk.models.enums.TicketPriority;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class TicketCreationRequest {
     private TicketPriority priority;
 
     @NotNull(message = "Category cannot be empty")
-    private TicketCategory category;
+    private Category category;
 
     private LocalDateTime dueDate;
 

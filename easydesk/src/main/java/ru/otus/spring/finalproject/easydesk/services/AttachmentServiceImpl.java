@@ -32,7 +32,7 @@ public class AttachmentServiceImpl implements AttachmentService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<AttachmentDto> getAttachmentsForTicketCode(String ticketCode) {
+    public List<AttachmentDto> getAttachmentsByTicketCode(String ticketCode) {
         return attachmentRepository.findAllByTicketCodeWithoutContent(ticketCode).map(mapper::attachmentToAttachmentDto).toList();
     }
 
@@ -45,7 +45,7 @@ public class AttachmentServiceImpl implements AttachmentService{
     }
 
     @Override
-    public AttachmentDto uploadAttachment(MultipartFile file, String ticketCode) {
+    public AttachmentDto uploadByTicketCode(MultipartFile file, String ticketCode) {
         var ticket = ticketService.getByCodeChecked(ticketCode);
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             try {
@@ -60,7 +60,7 @@ public class AttachmentServiceImpl implements AttachmentService{
     }
 
     @Override
-    public void deleteAttachment(Long attachmentId) {
+    public void deleteById(Long attachmentId) {
         if (isAttachmentExistByIdChecked(attachmentId)) {
             attachmentRepository.deleteById(attachmentId);
         }

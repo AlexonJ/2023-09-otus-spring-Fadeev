@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import ru.otus.spring.finalproject.easydesk.models.enums.Authorities;
-import ru.otus.spring.finalproject.easydesk.models.enums.Roles;
+import ru.otus.spring.finalproject.easydesk.models.enums.Role;
 
 @Getter
 @Setter
@@ -25,7 +25,7 @@ public class RolesAuthorities {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Role role;
 
     @Column
     @Enumerated(EnumType.STRING)

@@ -4,8 +4,14 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.finalproject.easydesk.dtos.SearchRequest;
+import ru.otus.spring.finalproject.easydesk.exceptions.CommonValidationException;
+import ru.otus.spring.finalproject.easydesk.exceptions.ErrorMessages;
+import ru.otus.spring.finalproject.easydesk.models.db.User;
+import ru.otus.spring.finalproject.easydesk.models.enums.TicketPriority;
 import ru.otus.spring.finalproject.easydesk.models.search.Searchable;
 import ru.otus.spring.finalproject.easydesk.exceptions.FieldValueParseException;
+import ru.otus.spring.finalproject.easydesk.repositories.UserRepository;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
@@ -20,6 +26,8 @@ public class EntitySearchServiceImpl implements EntitySearchService {
 
     private static final String WHERE_CONDITIONAL_TEMPLATE = "%s%s %s ?%s";
     private static final String SELECT_FROM_TEMPLATE = "SELECT %s FROM %s %s";
+
+    private final UserRepository userRepository;
 
     private final EntityManager entityManager;
 
@@ -53,7 +61,6 @@ public class EntitySearchServiceImpl implements EntitySearchService {
                 } catch (NumberFormatException | DateTimeParseException ex) {
                     throw new FieldValueParseException(ex.getMessage());
                 }
-
             }
 
             whereConditions.append(WHERE_CONDITIONAL_TEMPLATE.formatted(
@@ -82,12 +89,21 @@ public class EntitySearchServiceImpl implements EntitySearchService {
             return Integer.parseInt(stringValue);
         } else if (clazz.equals(Double.class)) {
             return Double.parseDouble(stringValue);
+        } else if (clazz.equals(Long.class)) {
+            return Long.parseLong(stringValue);
         } else if (clazz.equals(LocalDateTime.class)) {
             return LocalDateTime.parse(stringValue);
         } else if (clazz.equals(LocalDate.class)) {
             return LocalDate.parse(stringValue);
         } else if (clazz.equals(String.class)) {
             return stringValue;
+        } else if (clazz.equals(TicketPriority.class)) {
+            return TicketPriority.valueOf(stringValue);
+        } else if (clazz.equals(User.class)) {
+            return userRepository.findFirstById(Long.parseLong(stringValue)).orElseThrow(
+                    () -> new CommonValidationException(
+                            ErrorMessages.USER_NOT_FOUND_BY_ID.getCode(),
+                            ErrorMessages.USER_NOT_FOUND_BY_ID.getMessage().formatted(stringValue)));
         }
 
         return null;

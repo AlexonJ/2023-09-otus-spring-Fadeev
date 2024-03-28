@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto create(String commentText, String ticketCode) {
+    public CommentDto createByTicketCode(String commentText, String ticketCode) {
 
         var ticket = ticketService.getByCodeChecked(ticketCode);
 
@@ -41,14 +41,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto update(String content, Long id) {
+    public CommentDto updateById(String content, Long id) {
         var comment = findByIdChecked(id);
         comment.setContent(content);
         return mapper.commentToCommentDto(commentRepository.save(comment));
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         var comment = findByIdChecked(id);
         commentRepository.delete(comment);
     }

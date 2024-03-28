@@ -49,9 +49,17 @@ spring:
   servlet:
     multipart:
       max-file-size: 5MB
+management:
+  health:
+    mail:
+      enabled: ${SPRING_MAIL_CHECK_HEALTH:false}
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 service:
+  base-path: "api/v1"
   allow-sending-email: ${SERVICE_ALLOW_SENDING_EMAIL:false}
-  base-path: "api/v1/"
-  default-priority: "MEDIUM"
-  days-due-period: 3
+  default-priority: ${SERVICE_DEFAULT_TICKET_PRIORITY:"MEDIUM"}
+  days-due-period: ${SERVICE_DEFAULT_DUE_PERIOD_DAYS:3}

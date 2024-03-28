@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import ru.otus.spring.finalproject.easydesk.models.enums.Roles;
+import ru.otus.spring.finalproject.easydesk.models.enums.Role;
 
 @Getter
 @Setter
@@ -23,6 +23,12 @@ public class User {
     private long id;
 
     @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
+    @Column
     private String username;
 
     @Column
@@ -33,6 +39,10 @@ public class User {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Roles role;
+    private Role role;
+
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
 
 }

@@ -10,8 +10,7 @@ import ru.otus.spring.finalproject.easydesk.models.search.TicketSearchFields;
 import java.util.List;
 
 public interface TicketService {
-    List<TicketDto> getTickets(SearchRequest<TicketSearchFields> request);
-
+    List<TicketDto> findTickets(SearchRequest<TicketSearchFields> request);
 
     TicketDto saveTicket(String code, TicketModificationRequest request);
 
@@ -20,4 +19,6 @@ public interface TicketService {
     Ticket getByIdChecked(Long id);
 
     Ticket getByCodeChecked(String code);
+
+    void deleteByCode(String code);
 }

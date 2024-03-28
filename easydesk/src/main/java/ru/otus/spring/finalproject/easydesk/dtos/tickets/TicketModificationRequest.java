@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.otus.spring.finalproject.easydesk.models.enums.TicketCategory;
+import ru.otus.spring.finalproject.easydesk.models.enums.Category;
 import ru.otus.spring.finalproject.easydesk.models.enums.TicketPriority;
 
 import java.time.LocalDateTime;
@@ -23,8 +23,10 @@ public class TicketModificationRequest {
 
     private TicketPriority priority;
 
-    private TicketCategory category;
+    private Category category;
 
     private LocalDateTime dueDate;
+
+    private String waypointName;
 
 }

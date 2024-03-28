@@ -29,17 +29,17 @@ public class CommentControllerImpl implements CommentController {
 
     @Override
     public ResponseEntity<CommentDto> createComment(String commentText, String ticketCode) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.create(commentText, ticketCode));
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createByTicketCode(commentText, ticketCode));
     }
 
     @Override
     public ResponseEntity<CommentDto> updateComment(String commentContent, Long commentId) {
-        return ResponseEntity.ok().body(commentService.update(commentContent, commentId));
+        return ResponseEntity.ok().body(commentService.updateById(commentContent, commentId));
     }
 
     @Override
     public ResponseEntity<Void> deleteComment(Long commentId) {
-        commentService.delete(commentId);
+        commentService.deleteById(commentId);
         return ResponseEntity.ok().build();
     }
 }

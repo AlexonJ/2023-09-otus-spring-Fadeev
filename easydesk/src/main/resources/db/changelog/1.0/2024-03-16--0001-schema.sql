@@ -1,10 +1,19 @@
 CREATE TABLE users
 (
+    id         BIGSERIAL PRIMARY KEY,
+    first_name VARCHAR(100),
+    last_name  VARCHAR(100),
+    username   VARCHAR(30),
+    password   VARCHAR(100),
+    role       VARCHAR(50),
+    email      VARCHAR(1024)
+);
+
+CREATE TABLE users_categories
+(
     id       BIGSERIAL PRIMARY KEY,
-    username VARCHAR(30),
-    password varchar(100),
-    role     VARCHAR(50),
-    email    VARCHAR(1024)
+    user_id  BIGSERIAL REFERENCES users (id),
+    category VARCHAR(50)
 );
 
 CREATE TABLE roles_authorities
@@ -16,15 +25,18 @@ CREATE TABLE roles_authorities
 
 CREATE TABLE processes
 (
-    id   BIGSERIAL PRIMARY KEY,
-    name VARCHAR(50)
+    id                BIGSERIAL PRIMARY KEY,
+    name              VARCHAR(50),
+    category          VARCHAR(50),
+    starting_point_id BIGSERIAL REFERENCES processes (id)
 );
 
 CREATE TABLE waypoints
 (
     id         BIGSERIAL PRIMARY KEY,
-    process_id BIGSERIAL REFERENCES processes (id),
-    name       VARCHAR(50)
+    name       VARCHAR(50),
+    process_id BIGSERIAL REFERENCES processes (id)
+
 );
 
 CREATE TABLE tickets
@@ -40,7 +52,15 @@ CREATE TABLE tickets
     due_date       TIMESTAMP,
     created_by_id  BIGSERIAL REFERENCES users (id),
     assigned_to_id BIGSERIAL REFERENCES users (id),
+    assigned_by_id BIGSERIAL REFERENCES users (id),
     waypoint_id    BIGSERIAL REFERENCES waypoints (id)
+);
+
+CREATE TABLE waypoints_relations
+(
+    id               BIGSERIAL PRIMARY KEY,
+    waypoint_id      BIGSERIAL REFERENCES waypoints (id),
+    next_waypoint_id BIGSERIAL REFERENCES waypoints (id)
 );
 
 CREATE TABLE comments

@@ -1,28 +1,20 @@
 package ru.otus.spring.finalproject.easydesk.controllers;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.otus.spring.finalproject.easydesk.dtos.SearchRequest;
-import ru.otus.spring.finalproject.easydesk.dtos.TicketSearchResponse;
+import ru.otus.spring.finalproject.easydesk.dtos.SearchResponse;
 import ru.otus.spring.finalproject.easydesk.dtos.tickets.TicketCreationRequest;
 import ru.otus.spring.finalproject.easydesk.dtos.tickets.TicketDto;
 import ru.otus.spring.finalproject.easydesk.dtos.tickets.TicketModificationRequest;
 import ru.otus.spring.finalproject.easydesk.models.search.TicketSearchFields;
-import ru.otus.spring.finalproject.easydesk.dtos.errors.ErrorDetailed;
 import ru.otus.spring.finalproject.easydesk.services.TicketService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -32,25 +24,29 @@ public class TicketControllerImpl implements TicketController {
     private final TicketService ticketService;
 
     @Override
-    public ResponseEntity<TicketSearchResponse> getTicketList(
-            @RequestBody SearchRequest<TicketSearchFields> request) {
-        List<TicketDto> tickets = ticketService.getTickets(request);
-        return ResponseEntity.ok(TicketSearchResponse.builder().tickets(tickets).build());
+    public ResponseEntity<SearchResponse<TicketDto>> getTicketList(SearchRequest<TicketSearchFields> request) {
+        List<TicketDto> tickets = ticketService.findTickets(request);
+        SearchResponse<TicketDto> ticketSearchResponse = new SearchResponse<>();
+        ticketSearchResponse.setResult(tickets);
+        return ResponseEntity.ok(ticketSearchResponse);
     }
 
     @Override
-    public ResponseEntity<TicketDto> createTicket(
-            @RequestBody TicketCreationRequest request) {
+    public ResponseEntity<TicketDto> createTicket(TicketCreationRequest request) {
         TicketDto ticket = ticketService.createTicket(request);
-        return ResponseEntity.ok(ticket);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ticket);
     }
 
     @Override
-    public ResponseEntity<TicketDto> updateTicket(
-            @PathVariable String code,
-            @RequestBody  TicketModificationRequest request) {
+    public ResponseEntity<TicketDto> updateTicket(String code, TicketModificationRequest request) {
         TicketDto ticket = ticketService.saveTicket(code, request);
         return ResponseEntity.ok(ticket);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteTicket(String code) {
+        ticketService.deleteByCode(code);
+        return ResponseEntity.ok().build();
     }
 
 }

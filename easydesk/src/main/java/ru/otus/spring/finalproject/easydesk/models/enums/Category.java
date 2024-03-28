@@ -3,7 +3,7 @@ package ru.otus.spring.finalproject.easydesk.models.enums;
 import lombok.Getter;
 
 @Getter
-public enum TicketCategory {
+public enum Category {
     BUG_REPORT("BUG"),
     FEATURE_REQUEST("FRQ"),
     TECHNICAL_ISSUE("TCH"),
@@ -17,7 +17,7 @@ public enum TicketCategory {
 
     private final String codePrefix;
 
-    TicketCategory(String codePrefix) {
+    Category(String codePrefix) {
         this.codePrefix = codePrefix;
     }
 }

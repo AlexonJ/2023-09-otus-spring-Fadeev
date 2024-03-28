@@ -26,19 +26,21 @@ public class ControllerAdvice {
             EntityNotFoundException.class,
             CommonValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleClientErrorException(RuntimeException ex) {
+    public ResponseEntity<ErrorResponse> handleClientErrorException(RuntimeException ex) {
 
         var errorDetailed = ErrorDetailed.builder();
         if (ex instanceof FieldValueParseException) {
             errorDetailed.code(101);
         } else if (ex instanceof EntityExistException) {
             errorDetailed.code(102);
+        } else if (ex instanceof EntityNotFoundException) {
+            errorDetailed.code(103);
         } else if (ex instanceof CommonValidationException) {
             errorDetailed.code(((CommonValidationException) ex).getErrorCode());
         }
 
         errorDetailed.message(ex.getMessage());
-        return new ErrorResponse(errorDetailed.build());
+        return ResponseEntity.badRequest().body(new ErrorResponse(errorDetailed.build()));
     }
 
     @ExceptionHandler({InternalServerErrorException.class})

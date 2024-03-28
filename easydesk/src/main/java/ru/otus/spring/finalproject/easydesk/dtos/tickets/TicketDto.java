@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 import ru.otus.spring.finalproject.easydesk.dtos.users.UserDto;
 import ru.otus.spring.finalproject.easydesk.dtos.waypoints.WaypointDto;
 import ru.otus.spring.finalproject.easydesk.models.db.User;
-import ru.otus.spring.finalproject.easydesk.models.db.Waypoint;
-import ru.otus.spring.finalproject.easydesk.models.enums.TicketCategory;
+import ru.otus.spring.finalproject.easydesk.models.enums.Category;
 import ru.otus.spring.finalproject.easydesk.models.enums.TicketPriority;
 
 import java.time.LocalDateTime;
@@ -31,7 +30,7 @@ public class TicketDto {
 
     private TicketPriority priority;
 
-    private TicketCategory category;
+    private Category category;
 
     private LocalDateTime createdAt;
 
@@ -42,6 +41,8 @@ public class TicketDto {
     private UserDto createdBy;
 
     private UserDto assignedTo;
+
+    private UserDto assignedBy;
 
     private WaypointDto waypoint;
 

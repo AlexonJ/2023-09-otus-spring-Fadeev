@@ -12,7 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import ru.otus.spring.finalproject.easydesk.models.enums.TicketCategory;
+import ru.otus.spring.finalproject.easydesk.models.enums.Category;
 import ru.otus.spring.finalproject.easydesk.models.enums.TicketPriority;
 
 import java.time.LocalDateTime;
@@ -39,11 +39,11 @@ public class Ticket {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private TicketPriority priority;
+    private Category category;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private TicketCategory category;
+    private TicketPriority priority;
 
     @Column
     private LocalDateTime createdAt;
@@ -59,6 +59,9 @@ public class Ticket {
 
     @ManyToOne
     private User assignedTo;
+
+    @ManyToOne
+    private User assignedBy;
 
     @ManyToOne
     private Waypoint waypoint;
