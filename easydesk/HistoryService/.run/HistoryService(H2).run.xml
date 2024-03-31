@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="HistoryService(H2)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="HistoryService">
+    <envs>
+      <env name="SERVER_PORT" value="8080" />
+      <env name="SPRING_DATASOURCE_PASSWORD" value="" />
+      <env name="SPRING_DATASOURCE_URL" value="r2dbc:h2:mem:historyservicedb" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="sa" />
+    </envs>
+    <module name="HistoryService" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.otus.spring.finalproject.historyservice.HistoryServiceApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
