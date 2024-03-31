@@ -1,0 +1,11 @@
+FROM openjdk:22-jdk-slim-bullseye
+
+# Set metadata for the image
+LABEL maintainer="Alexey <fmailp@yandex.ru>"
+LABEL description="This is a Docker image based on Debian with java and History service for EasyDesk application."
+LABEL version="2.0"
+LABEL release-date="2024-03-28"
+
+EXPOSE 8081
+ADD ../target/HistoryService-1.0.0.jar HistoryService.jar
+ENTRYPOINT ["java","-jar","/HistoryService.jar"]
