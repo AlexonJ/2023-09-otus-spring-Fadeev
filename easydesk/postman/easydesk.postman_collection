@@ -46,7 +46,7 @@
 							"response": []
 						},
 						{
-							"name": "Search tickets by created date",
+							"name": "Search tickets by user ID and priority",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -55,7 +55,40 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"searchConditionals\": [\r\n    // {\r\n    //   \"field\": \"TICKET_CODE\",\r\n    //   \"condition\": \"EQUAL\",\r\n    //   \"values\": [\r\n    //     \"TCK001\"\r\n    //   ]\r\n    // }\r\n  ]\r\n}\r\n// for all tickets\r\n// {\r\n//   \"searchConditionals\": [\r\n//   ]\r\n// }",
+									"raw": "{\r\n  \"searchConditionals\": [\r\n    {\r\n      \"field\": \"ASSIGNED_TO_ID\",\r\n      \"condition\": \"EQUAL\",\r\n      \"values\": [\r\n        \"1\"\r\n      ]\r\n    },\r\n    {\r\n      \"field\": \"PRIORITY\",\r\n      \"condition\": \"EQUAL\",\r\n      \"values\": [\r\n        \"HIGH\"\r\n      ]\r\n    }    \r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/tickets",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"tickets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Search tickets by priority and due date",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"searchConditionals\": [\r\n    {\r\n      \"field\": \"ASSIGNED_TO_ID\",\r\n      \"condition\": \"EQUAL\",\r\n      \"values\": [\r\n        \"1\"\r\n      ]\r\n    },\r\n    {\r\n      \"field\": \"DUE_DATE\",\r\n      \"condition\": \"GREATER\",\r\n      \"values\": [\r\n        \"2024-03-15T10:00:00\"\r\n      ]\r\n    },\r\n    {\r\n      \"field\": \"DUE_DATE\",\r\n      \"condition\": \"LESS\",\r\n      \"values\": [\r\n        \"2024-03-26T10:00:00\"\r\n      ]\r\n    }\r\n\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -88,7 +121,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"searchConditionals\": [\r\n    // {\r\n    //   \"field\": \"TICKET_CODE\",\r\n    //   \"condition\": \"EQUAL\",\r\n    //   \"values\": [\r\n    //     \"TCK001\"\r\n    //   ]\r\n    // }\r\n  ]\r\n}\r\n// for all tickets\r\n// {\r\n//   \"searchConditionals\": [\r\n//   ]\r\n// }",
+									"raw": "{\r\n  \"searchConditionals\": [\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -137,7 +170,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/api/v1/tickets/INF002",
+									"raw": "http://localhost:8080/api/v1/tickets/INF001",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -147,7 +180,7 @@
 										"api",
 										"v1",
 										"tickets",
-										"INF002"
+										"INF001"
 									]
 								}
 							},
@@ -165,7 +198,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\": \"Database connection issue - NEW\",\r\n    \"description\": \"Unable to connect to the database server. NEW\",\r\n    \"priority\": \"LOW\",\r\n    \"category\": \"BUG_REPORT\",\r\n    \"waypointName\": \"Close\"\r\n}",
+									"raw": "{\r\n    \"title\": \"Database connection issue - NEW\",\r\n    \"description\": \"Unable to connect to the database server. NEW\",\r\n    \"priority\": \"LOW\",\r\n    \"category\": \"BUG_REPORT\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -196,7 +229,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"waypointName\": \"Close\"\r\n}",
+									"raw": "{\r\n    \"waypointName\": \"Create\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -342,10 +375,24 @@
 					"response": []
 				},
 				{
-					"name": "getAttachmentContent",
+					"name": "get attachment content",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/attachments/9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"attachments",
+								"9"
+							]
+						}
 					},
 					"response": []
 				},
@@ -375,12 +422,12 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/C:/Users/FMail/Issue message.txt"
+									"src": "/C:/Users/FMail/Text file example.txt"
 								}
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/attachments/ticket/INF003",
+							"raw": "http://localhost:8080/api/v1/attachments/ticket/SEC001",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -391,7 +438,7 @@
 								"v1",
 								"attachments",
 								"ticket",
-								"INF003"
+								"SEC001"
 							]
 						}
 					},
@@ -461,9 +508,375 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reporting",
+			"item": [
+				{
+					"name": "Get ticket summary data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/reports/ticket-summary-data?beginDate=2024-03-12&endDate=2024-04-02",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"reports",
+								"ticket-summary-data"
+							],
+							"query": [
+								{
+									"key": "beginDate",
+									"value": "2024-03-12"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-04-02"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "History service",
+			"item": [
+				{
+					"name": "Add history",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"objectId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n    \"type\": \"type\",\r\n    \"fields\": [\r\n        {\r\n            \"name\": \"field1\",\r\n            \"value\": \"value1\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/v1/history/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Scenario 1",
+			"item": [
+				{
+					"name": "Create new ticket",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "alexeyyf",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "adm",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Database connection issue\",\r\n    \"description\": \"Unable to connect to the database server.\",\r\n    \"priority\": \"HIGH\",\r\n    \"category\": \"SECURITY_CONCERN\"\r\n    // \"dueDate\": \"2024-03-18T10:00:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tickets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tickets"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Search tickets by priority and due date",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"searchConditionals\": [\r\n    {\r\n      \"field\": \"ASSIGNED_TO_ID\",\r\n      \"condition\": \"EQUAL\",\r\n      \"values\": [\r\n        \"1\"\r\n      ]\r\n    },\r\n    {\r\n      \"field\": \"DUE_DATE\",\r\n      \"condition\": \"GREATER\",\r\n      \"values\": [\r\n        \"2024-04-04T00:00:00\"\r\n      ]\r\n    },\r\n    {\r\n      \"field\": \"DUE_DATE\",\r\n      \"condition\": \"LESS\",\r\n      \"values\": [\r\n        \"2024-04-04T23:59:59\"\r\n      ]\r\n    }\r\n\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tickets",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload attachment - Wrong",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "adm",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/FMail/IdeaProjects/OTUS/2023-10-otus-spring-Fadeev/easydesk/Attachments demo/Example of attachment.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/attachments/ticket/SEC111",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"attachments",
+								"ticket",
+								"SEC111"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload attachment",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "adm",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/FMail/IdeaProjects/OTUS/2023-10-otus-spring-Fadeev/easydesk/Attachments demo/Example of attachment.txt"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/attachments/ticket/SEC006",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"attachments",
+								"ticket",
+								"SEC006"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get attachment content",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/attachments/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"attachments",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Some modification for ticket SEC006",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Database connection issue - NEW\",\r\n    \"description\": \"Unable to connect to the database server. NEW\",\r\n    \"priority\": \"LOW\",\r\n    \"category\": \"BUG_REPORT\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tickets/SEC006",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tickets",
+								"SEC006"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change waypoint for ticket SEC006 - wrong",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"waypointName\": \"Archive\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tickets/SEC006",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tickets",
+								"SEC006"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change waypoint for ticket SEC006 - wrong Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"waypointName\": \"Archive\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tickets/SEC006",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tickets",
+								"SEC006"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new comment",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -505,19 +918,30 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Reporting",
-			"item": [
+				},
 				{
-					"name": "Get ticket summary data",
+					"name": "Get comments for ticket",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "adm",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/v1/reporting/ticket-summary-data?beginDate=2024-03-12&endDate=2024-03-22",
+							"raw": "http://localhost:8080/api/v1/comments/ticket/TCH001",
+							"protocol": "http",
 							"host": [
 								"localhost"
 							],
@@ -525,7 +949,29 @@
 							"path": [
 								"api",
 								"v1",
-								"reporting",
+								"comments",
+								"ticket",
+								"TCH001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get ticket summary data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/reports/ticket-summary-data?beginDate=2024-03-12&endDate=2024-04-12",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"reports",
 								"ticket-summary-data"
 							],
 							"query": [
@@ -535,7 +981,7 @@
 								},
 								{
 									"key": "endDate",
-									"value": "2024-03-22"
+									"value": "2024-04-12"
 								}
 							]
 						}
@@ -545,13 +991,68 @@
 			]
 		},
 		{
-			"name": "History service",
+			"name": "Metrics",
 			"item": [
 				{
-					"name": "Add history",
+					"name": "database_total_added_entities",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/actuator/metrics/database_total_added_entities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"actuator",
+								"metrics",
+								"database_total_added_entities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "database_total_changed_entities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/actuator/metrics/database_total_added_entities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"actuator",
+								"metrics",
+								"database_total_added_entities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "database_total_deleted_entities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/actuator/metrics/database_total_deleted_entities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"actuator",
+								"metrics",
+								"database_total_deleted_entities"
+							]
+						}
 					},
 					"response": []
 				}
