@@ -1,4 +1,4 @@
-package ru.otus.spring.finalproject.easydesk.actuators;
+package ru.otus.spring.finalproject.easydesk.metrics;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

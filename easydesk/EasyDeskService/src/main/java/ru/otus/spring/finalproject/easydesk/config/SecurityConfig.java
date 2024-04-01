@@ -30,29 +30,37 @@ public class SecurityConfig {
     private static final String COMMENT_API_PATH = "/comments";
 
     private static final String ATTACHMENT_API_PATH = "/attachments";
+
+    private static final String REPORT_API_PATH = "/reports";
     @Bean
     public SecurityFilterChain securityFilterChainForApi(HttpSecurity httpSecurity) throws Exception {
         String basePath = settingsProvider.getBasePath();
-        String ticketApiFullPath = basePath + TICKET_API_PATH + "/**";
+        String[] ticketApiFullPath = {basePath + TICKET_API_PATH + "/**", "tickets/**"};
         String commentApiFullPath = basePath + COMMENT_API_PATH + "/**";
         String attachmentApiFullPath = basePath + ATTACHMENT_API_PATH + "/**";
+        String reportApiFullPath = basePath + REPORT_API_PATH + "/**";
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionConfigurer -> sessionConfigurer.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .authorizeHttpRequests(authorizationManager -> authorizationManager
-                                .requestMatchers("error", "h2-console/**", "swagger-ui/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, ticketApiFullPath).hasAuthority("READ_TICKETS")
-                                .requestMatchers(HttpMethod.POST, ticketApiFullPath).hasAuthority("CREATE_TICKETS")
-                                .requestMatchers(HttpMethod.DELETE, ticketApiFullPath).hasAuthority("DELETE_TICKETS")
-                                .requestMatchers(HttpMethod.GET, commentApiFullPath).hasAuthority("READ_COMMENTS")
-                                .requestMatchers(HttpMethod.POST, commentApiFullPath).hasAuthority("CREATE_COMMENTS")
-                                .requestMatchers(HttpMethod.DELETE, commentApiFullPath).hasAuthority("DELETE_COMMENTS")
-                                .requestMatchers(HttpMethod.GET, attachmentApiFullPath).hasAuthority("READ_ATTACHMENTS")
-                                .requestMatchers(HttpMethod.POST, attachmentApiFullPath).hasAuthority("CREATE_ATTACHMENTS")
-                                .requestMatchers(HttpMethod.DELETE, attachmentApiFullPath).hasAuthority("DELETE_ATTACHMENTS")
-//                        .requestMatchers("/index.html").authenticated()
-                                .anyRequest().authenticated()
-//                        .anyRequest().denyAll()
+//                                .anyRequest().permitAll()
+                        .requestMatchers("error", "h2-console/**").permitAll()
+                        .requestMatchers("index.html", "swagger-ui/**", "actuator/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, ticketApiFullPath).hasAnyAuthority(
+                                "READ_TICKETS", "READ_TICKETS_OWNER")
+                        .requestMatchers(HttpMethod.POST, ticketApiFullPath).hasAnyAuthority(
+                                "CREATE_TICKETS", "MODIFY_TICKETS", "MODIFY_TICKETS_OWNER")
+                        .requestMatchers(HttpMethod.DELETE, ticketApiFullPath).hasAnyAuthority(
+                                "DELETE_TICKETS", "DELETE_TICKETS_OWNER")
+                        .requestMatchers(HttpMethod.GET, commentApiFullPath).hasAuthority("READ_COMMENTS")
+                        .requestMatchers(HttpMethod.POST, commentApiFullPath).hasAnyAuthority(
+                                "CREATE_COMMENTS", "CREATE_COMMENTS_OWNER")
+                        .requestMatchers(HttpMethod.DELETE, commentApiFullPath).hasAuthority("DELETE_COMMENTS")
+                        .requestMatchers(HttpMethod.GET, attachmentApiFullPath).hasAuthority("READ_ATTACHMENTS")
+                        .requestMatchers(HttpMethod.POST, attachmentApiFullPath).hasAuthority("CREATE_ATTACHMENTS")
+                        .requestMatchers(HttpMethod.DELETE, attachmentApiFullPath).hasAuthority("DELETE_ATTACHMENTS")
+                        .requestMatchers(HttpMethod.GET, reportApiFullPath).hasAuthority("READ_REPORTS")
+                        .anyRequest().denyAll()
                 )
                 .userDetailsService(userDetailsService)
                 .formLogin(Customizer.withDefaults())

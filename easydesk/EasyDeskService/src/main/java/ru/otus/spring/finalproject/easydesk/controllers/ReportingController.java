@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +19,7 @@ import ru.otus.spring.finalproject.easydesk.dtos.errors.ErrorResponse;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping(path = "/api/v1/reporting")
+@RequestMapping(path = "/api/v1/reports")
 @Tag(name = "Reporting controller", description = "Endpoints for getting reports")
 public interface ReportingController {
 

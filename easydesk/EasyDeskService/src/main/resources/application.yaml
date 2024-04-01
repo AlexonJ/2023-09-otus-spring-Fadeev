@@ -59,7 +59,7 @@ management:
         include: "*"
 
 service:
-  base-path: "api/v1"
+  base-path: "/api/v1"
   email-sending-enabled: ${SERVICE_EMAIL_SENDING_ENABLED:false}
   default-priority: ${SERVICE_DEFAULT_TICKET_PRIORITY:"MEDIUM"}
   days-due-period: ${SERVICE_DEFAULT_DUE_PERIOD_DAYS:3}

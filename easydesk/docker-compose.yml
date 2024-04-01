@@ -16,7 +16,7 @@ services:
       - SERVICE_HISTORY_SENDING_ENABLED=true
       - SPRING_MAIL_CHECK_HEALTH=false
       - SPRING_MAIL_HOST=smtp.gmail.com
-      - SPRING_MAIL_PASSWORD=Grks#kGoejMEXG20
+      - SPRING_MAIL_PASSWORD=fakepassword
       - SPRING_MAIL_PORT=587
       - SPRING_MAIL_USERNAME=testalextest
     depends_on:
