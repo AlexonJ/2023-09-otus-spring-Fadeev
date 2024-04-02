@@ -1,0 +1,44 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Index Page</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .category-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .category-list-item {
+            margin-bottom: 10px;
+        }
+
+        .category-link {
+            text-decoration: none;
+            color: steelblue;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+<h3>Main page</h3>
+
+<ul class="category-list">
+    <li class="category-list-item">
+        <a th:href="@{/books}" class="category-link">Books</a>
+    </li>
+    <li class="category-list-item">
+        <a th:href="@{/authors}" class="category-link">Authors</a>
+    </li>
+    <li class="category-list-item">
+        <a th:href="@{/genres}" class="category-link">Genres</a>
+    </li>
+</ul>
+
+</body>
+</html>
