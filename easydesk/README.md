@@ -1,6 +1,6 @@
 ## Ticket Management System - "EasyDesk"
 
-### Technologies Used:
+### Technologies used:
 - Spring Boot
 - PostgreSQL
 - Liquibase
@@ -11,9 +11,10 @@
 - Docker
 - UI - Thymeleaf + HTML
 
-#### Data Stored by the System:
-1. **Ticket Data:**
+#### Data stored by the system:
+1. **Ticket data:**
     - Ticket ID
+    - Ticket code
     - Title
     - Description
     - User who created the ticket (client)
@@ -22,10 +23,10 @@
     - Creation Date
     - Expected Completion Date
     - Information about the executor
-    - Additional attachments/information
-    - Comments/messages
+    - Additional attachments
+    - Comments (messages)
 
-2. **User Data:**
+2. **User data:**
     - Username
     - Password
     - Full Name
@@ -33,23 +34,23 @@
     - Rating
     - Email
 
-3. **Route Data:**
+3. **Route data:**
     - Route points and their connections
 
-4. **Message Data:**
+4. **Message data:**
     - Ticket
     - Text
-    - Creation Date
+    - Creation date
     - Recipient and sender
 
-5. **Attachment Data:**
+5. **Attachment data:**
     - Name
     - Content
     - Creation Date
     - User creator
 
-#### System Functions:
-1. **Ticket Management:**
+#### System functions:
+1. **Ticket management:**
     - Creation of tickets with addressing to the least loaded user in the group
     - Access control for users to tickets of individual groups, as well as attachments and messages
     - Editing ticket data
