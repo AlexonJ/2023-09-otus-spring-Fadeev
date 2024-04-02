@@ -30,6 +30,7 @@
         <liquibase.version>4.23.0</liquibase.version>
         <org.lombok.version>1.18.30</org.lombok.version>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <resilience4j.version>2.2.0</resilience4j.version>
     </properties>
 
     <dependencies>
@@ -109,6 +110,12 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-rest-hal-explorer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>${resilience4j.version}</version>
         </dependency>
 
     </dependencies>

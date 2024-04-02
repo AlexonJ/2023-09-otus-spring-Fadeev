@@ -1,8 +1,11 @@
 package ru.otus.spring.bookstore.services;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.spring.bookstore.dtos.BookDto;
 import ru.otus.spring.bookstore.dtos.CommentDto;
 import ru.otus.spring.bookstore.exceptions.EntityNotFoundException;
 import ru.otus.spring.bookstore.mappers.DtoMapper;
@@ -11,6 +14,7 @@ import ru.otus.spring.bookstore.models.Comment;
 import ru.otus.spring.bookstore.repositories.BookRepository;
 import ru.otus.spring.bookstore.repositories.CommentRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,12 +32,14 @@ public class CommentServiceImpl implements CommentService {
     private final DtoMapper mapper;
 
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyCommentDtoList")
     public List<CommentDto> findCommentsByBookId(long id) {
          List<Comment> comments = commentRepository.findAllByBookId(id);
          return comments.stream().map(mapper::commentToCommentDto).toList();
     }
 
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyComment")
     public CommentDto findById(long id) {
         return commentRepository.findById(id).map(mapper::commentToCommentDto)
                 .orElseThrow(() -> new EntityNotFoundException(COMMENT_NOT_FOUND_MESSAGE.formatted(id)));
@@ -41,6 +47,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyComment")
+    @Retry(name = "retryService")
     public CommentDto insert(long bookId, String content) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException(BOOK_NOT_FOUND_MESSAGE.formatted(bookId)));
@@ -49,6 +57,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyComment")
     public CommentDto updateById(long id, String content) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(COMMENT_NOT_FOUND_MESSAGE.formatted(id)));
@@ -61,4 +70,11 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
+    public CommentDto fallbackEmptyComment(Throwable e) {
+        return new CommentDto();
+    }
+
+    public List<CommentDto> fallbackEmptyCommentDtoList(Throwable e) {
+        return new ArrayList<>();
+    }
 }
