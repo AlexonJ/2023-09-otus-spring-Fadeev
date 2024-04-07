@@ -1,0 +1,24 @@
+package ru.otus.spring.finalproject.easydesk.models.enums;
+
+public enum Authorities {
+
+    READ_TICKETS,
+    READ_TICKETS_OWNER,
+    CREATE_TICKETS,
+    MODIFY_TICKETS,
+    MODIFY_TICKETS_OWNER,
+    DELETE_TICKETS,
+    DELETE_TICKETS_OWNER,
+
+    READ_COMMENTS,
+    CREATE_COMMENTS,
+    MODIFY_COMMENTS,
+    DELETE_COMMENTS,
+
+    READ_ATTACHMENTS,
+    CREATE_ATTACHMENTS,
+    MODIFY_ATTACHMENTS,
+    DELETE_ATTACHMENTS,
+
+    READ_REPORTS,
+}

@@ -1,0 +1,53 @@
+version: '3'
+services:
+  easydeskservice:
+    container_name: docker-easydesk-service
+    build:
+      context: ./EasyDeskService
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICE_EMAIL_SENDING_ENABLED=false
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/easydeskservicedb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SERVICE_HISTORY_SERVICE_PATH=http://historyservice:8080/api/v1/history/
+      - SERVICE_HISTORY_SENDING_ENABLED=true
+      - SPRING_MAIL_CHECK_HEALTH=false
+      - SPRING_MAIL_HOST=smtp.gmail.com
+      - SPRING_MAIL_PASSWORD=fakepassword
+      - SPRING_MAIL_PORT=587
+      - SPRING_MAIL_USERNAME=testalextest
+    depends_on:
+      - postgres
+    command: [ "./wait-for-postgres.sh", "postgres", "java", "-jar", "/EasyDeskService.jar" ]
+
+  historyservice:
+    container_name: docker-history-service
+    build:
+      context: ./HistoryService
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres:5432/historyservicedb
+      - SPRING_R2DBC_URL=r2dbc:postgresql://postgres:5432/historyservicedb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - postgres
+    command: [ "./wait-for-postgres.sh", "postgres", "java", "-jar", "/HistoryService.jar" ]
+
+  postgres:
+    image: "postgres:13"
+    container_name: docker-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_DATABASES=easydeskservicedb,postgres:historyservicedb,postgres
+    volumes:
+      - ../docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+      - ./create_multiple_databases.sh:/docker-entrypoint-initdb.d/create_multiple_databases.sh

@@ -1,0 +1,67 @@
+server:
+  port: ${SERVER_PORT:8080}
+spring:
+  application:
+    name: EasyDeskService
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:easydeskervicedb}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+  logging:
+    level:
+      ROOT: INFO
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:easydeskservicedb}
+    user: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    enabled: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  data:
+    rest:
+      base-path: /api-rest
+  mail:
+    host: ${SPRING_MAIL_HOST:}
+    port: ${SPRING_MAIL_PORT:}
+    username: ${SPRING_MAIL_USERNAME:TEST_USERNAME}
+    password: ${SPRING_MAIL_PASSWORD:TEST_PASSWORD}
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
+  servlet:
+    multipart:
+      max-file-size: 5MB
+management:
+  health:
+    mail:
+      enabled: ${SPRING_MAIL_CHECK_HEALTH:false}
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+service:
+  base-path: "/api/v1"
+  email-sending-enabled: ${SERVICE_EMAIL_SENDING_ENABLED:false}
+  default-priority: ${SERVICE_DEFAULT_TICKET_PRIORITY:"MEDIUM"}
+  days-due-period: ${SERVICE_DEFAULT_DUE_PERIOD_DAYS:3}
+  history-service-path: ${SERVICE_HISTORY_SERVICE_PATH:}
+  history-sending-enabled: ${SERVICE_HISTORY_SENDING_ENABLED:false}

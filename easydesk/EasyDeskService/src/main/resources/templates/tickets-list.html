@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Tickets search</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .tickets {
+            border: 1px solid steelblue;
+            width: auto;
+            border-collapse: collapse;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .tickets tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+            width: 100px;
+        }
+
+        .tickets td:last-child, td:first-child {
+            width: fit-content;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .button-container button {
+            width: 150px;
+        }
+
+        h3 {
+            background-image: url("../static/listmark.png");
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+    </style>
+
+</head>
+
+<body>
+<form id="search-form" action="tickets-list.html" th:action="@{/tickets}" th:method="get">
+
+    <h3 th:text="'Tickets: '">Tickets search:</h3>
+
+    <div class="row">
+
+        <label for="priority-input" th:text="'Priority:'">Priority:</label>
+        <select id="priority-input" name="priority" th:value="${priority}">
+            <option value="">Select priority</option>
+            <option th:each="p : ${priorities}" th:value="${p}"
+                    th:text="${p}"></option>
+        </select>
+
+        <label for="due-date-begin-input" th:text="'Due date begin:'">Due date begin:</label>
+        <input type="date" id="due-date-begin-input" name="dueDateBegin" th:value="${dueDateBegin}">
+
+        <label for="due-date-end-input" th:text="'Due date end:'">Due date end:</label>
+        <input type="date" id="due-date-end-input" name="dueDateEnd" th:value="${dueDateEnd}">
+
+        <form th:action="@{/tickets}" method="get">
+            <button type="submit">Search tickets</button>
+        </form>
+
+    </div>
+
+
+    <table class="tickets" id="tickets-table">
+        <thead>
+        <tr>
+            <th th:text="'Code'">Code</th>
+            <th th:text="'Title'">Title</th>
+            <th th:text="'Description'">Description</th>
+            <th th:text="'Priority'">Priority</th>
+            <th th:text="'Due date'">Due date</th>
+            <th th:text="'Assigned to'">Assigned to</th>
+            <th th:text="Actions">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ticket : ${tickets}">
+            <td th:text="${ticket.getCode()}"/>
+            <td th:text="${ticket.getTitle()}"/>
+            <td th:text="${ticket.getDescription()}"/>
+            <td th:text="${ticket.getPriority()}"/>
+            <td th:with="dueDate=${ticket.getDueDate()}">
+                <span th:text="${#temporals.format(dueDate, 'yyyy-MM-dd')}"></span>
+                <br/>
+                <span th:text="${#temporals.format(dueDate, 'HH:mm')}"></span>
+            </td>
+            <td th:text="${ticket.getAssignedTo().getFullName()}"/>
+            <td>
+                <form th:action="@{/tickets/book}" method="get">
+                    <input type="hidden" name="id" th:value="${ticket.getId()}"/>
+                    <button type="submit">Edit</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="button-container">
+        <form th:action="@{/}" method="get">
+            <button type="submit">Home page</button>
+        </form>
+    </div>
+</form>
+</body>
+</html>

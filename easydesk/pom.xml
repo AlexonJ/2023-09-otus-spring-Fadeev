@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.1.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>ru.otus.spring.finalproject.easydeskapp</groupId>
+    <artifactId>EasyDeskApp</artifactId>
+    <version>1.0.0</version>
+    <name>EasyDeskApp</name>
+    <description>EasyDesk - ticket management system application</description>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <spring-security.version>6.0.2</spring-security.version>
+        <liquibase.version>4.23.0</liquibase.version>
+        <checkstyle-plugin.version>3.2.2</checkstyle-plugin.version>
+        <checkstyle.version>10.11.0</checkstyle.version>
+        <checkstyle.config.url>
+            https://raw.githubusercontent.com/OtusTeam/Spring/master/checkstyle.xml
+        </checkstyle.config.url>
+    </properties>
+    <modules>
+        <module>EasyDeskService</module>
+        <module>HistoryService</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

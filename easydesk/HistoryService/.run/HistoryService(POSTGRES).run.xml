@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="HistoryService(POSTGRES)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="HistoryService">
+    <envs>
+      <env name="SERVER_PORT" value="8081" />
+      <env name="SPRING_DATASOURCE_PASSWORD" value="postgres" />
+      <env name="SPRING_R2DBC_URL" value="r2dbc:postgresql://localhost:5432/historyservicedb" />
+      <env name="SPRING_DATASOURCE_USERNAME" value="postgres" />
+      <env name="SPRING_LIQUIBASE_URL" value="jdbc:postgresql://localhost:5432/historyservicedb" />
+    </envs>
+    <module name="HistoryService" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ru.otus.spring.finalproject.historyservice.HistoryServiceApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
