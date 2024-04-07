@@ -1,5 +1,7 @@
 package ru.otus.spring.bookstore.services;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,30 +37,36 @@ public class BookServiceImpl implements BookService {
 
     @Transactional
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyBook")
     public BookDto findById(long id) {
-        return bookRepository.findById(id).map(mapper::bookToBookDTO)
+        return bookRepository.findById(id)
+                .map(mapper::bookToBookDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id %d not found".formatted(id)));
     }
 
     @Transactional
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyBookList")
     public List<BookDto> findAll() {
         return bookRepository.findAll().stream().map(mapper::bookToBookDTO).toList();
     }
 
     @Transactional
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyBook")
     public BookDto insert(String title, long authorId, List<Long> genresIds, List<Long> commentIds) {
         return mapper.bookToBookDTO(save(0, title, authorId, genresIds, commentIds));
     }
 
     @Transactional
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyBook")
     public BookDto update(long id, String title, long authorId, List<Long> genresIds, List<Long> commentIds) {
         return mapper.bookToBookDTO(save(id, title, authorId, genresIds, commentIds));
     }
 
     @Override
+    @CircuitBreaker(name = "repositoryCircuitBreaker", fallbackMethod = "fallbackEmptyBookList")
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }
@@ -83,5 +91,13 @@ public class BookServiceImpl implements BookService {
 
         var book = new Book(id, title, author, genres, comments);
         return bookRepository.save(book);
+    }
+
+    public BookDto fallbackEmptyBook(Throwable e) {
+        return new BookDto();
+    }
+
+    public List<BookDto> fallbackEmptyBookList(Throwable e) {
+        return new ArrayList<>();
     }
 }

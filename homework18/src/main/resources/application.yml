@@ -32,6 +32,47 @@ management:
     defaults:
       enabled: true
 
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 100
+        permittedNumberOfCallsInHalfOpenState: 10
+        slowCallDurationThreshold: 4s
+        slowCallRateThreshold: 90
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        minimumNumberOfCalls: 2
+
+    instances:
+      repositoryCircuitBreaker:
+        baseConfig: default
+        waitDurationInOpenState: 5s
+
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 100ms
+    instances:
+      repositoryRetry:
+
+#      retryExceptions:
+#        - org.springframework.web.client.HttpServerErrorException
+#        - java.util.concurrent.TimeoutException
+#        - java.io.IOException
+#      ignoreExceptions:
+
+resilience4j.rateLimiter:
+  configs:
+    default:
+      timeoutDuration: 5s
+      limitForPeriod: 10
+      limit-refresh-period: 1s
+  instances:
+    mainRateLimiter:
+      baseConfig: default
+
 logging:
   level:
     ROOT: INFO
